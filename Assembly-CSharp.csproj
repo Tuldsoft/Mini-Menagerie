@@ -59,17 +59,19 @@
     <Compile Include="Assets\Scripts\NewMiniListPanel.cs" />
     <Compile Include="Assets\Scripts\BrowseSceneMonitor.cs" />
     <Compile Include="Assets\Scripts\MiniCollection.cs" />
+    <Compile Include="Assets\Scripts\MiniSceneMonitor.cs" />
     <Compile Include="Assets\Scripts\MenuManager.cs" />
     <Compile Include="Assets\Scripts\ScrollList.cs" />
     <Compile Include="Assets\Scripts\ScrollListMonitor.cs" />
     <Compile Include="Assets\Scripts\Initializer.cs" />
+    <Compile Include="Assets\Scripts\Utils.cs" />
     <Compile Include="Assets\Scripts\MiniID.cs" />
     <Compile Include="Assets\Scripts\Mini.cs" />
     <Compile Include="Assets\Scripts\ScrollListPanel.cs" />
     <Compile Include="Assets\Scripts\MiniListMonitor.cs" />
     <Compile Include="Assets\Scripts\MiniListPanel.cs" />
-    <Compile Include="Assets\Scripts\Utils.cs" />
-    <Compile Include="Assets\Scripts\MiniSceneMonitor.cs" />
+    <Compile Include="Assets\Scripts\ThumbListMonitor.cs" />
+    <Compile Include="Assets\Scripts\ThumbListPanel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

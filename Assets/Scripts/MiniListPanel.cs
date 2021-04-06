@@ -10,6 +10,8 @@ public class MiniListPanel : ScrollListPanel
     
     [SerializeField]
     Text nameText = null;
+    [SerializeField]
+    Image thumbImage = null;
 
     
 
@@ -24,6 +26,7 @@ public class MiniListPanel : ScrollListPanel
         mini = setMini;
         
         nameText.text = mini.ToString();
+        thumbImage.sprite = mini.Thumbnail;
 
         Utils.SetButtonColors(gameObject.GetComponentInChildren<Button>());
 
@@ -31,7 +34,7 @@ public class MiniListPanel : ScrollListPanel
 
     public void Panel_Click()
     {
-        MenuManager.ActiveMini = mini;
+        Mini.SetActiveMini(mini);
         MenuManager.GoToMenu(MenuName.View_Mini);
 
     }

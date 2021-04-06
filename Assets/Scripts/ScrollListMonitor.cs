@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScrollListMonitor : MonoBehaviour
+public abstract class ScrollListMonitor : MonoBehaviour
 {
     #region Fields
 
@@ -10,6 +11,10 @@ public class ScrollListMonitor : MonoBehaviour
     protected GameObject gridContent = null;
 
     protected GameObject prefabPanel = null; // set by Start() in children
+
+    protected List<IComparable> referenceList;
+
+    protected bool keepFirstPanel = false;
 
     #endregion
 
@@ -19,35 +24,19 @@ public class ScrollListMonitor : MonoBehaviour
     {
         PopulateGrid();
     }
-
-    /*// Update is called once per frame
-    void Update()
-    {
-        
-    }*/
-
+       
 
 
     // Fills the ScrollList with ScrollListPanels
-    public virtual void PopulateGrid()
-    {
-        EmptyGrid();
-
-        GameObject newPanel;
-
-        foreach (Mini mini in MiniCollection.Minis)
-        {
-            newPanel = Instantiate(prefabPanel, gridContent.transform);
-            ScrollListPanel miniPanel = newPanel.GetComponent<ScrollListPanel>();
-
-            miniPanel.SetPanel(mini, this);
-        }
-    }
+    public abstract void PopulateGrid();
+    // body must contain a foreach loop that iterates through a collection,
+    // instantiating new prefabs for each item in the collection.
+    
 
     // Empty the ScrollList
-    void EmptyGrid()
+    protected void EmptyGrid()
     {
-        for (int i = 0; i < gridContent.transform.childCount; i++)
+        for (int i = (keepFirstPanel ? 1 : 0); i < gridContent.transform.childCount; i++)
         {
             Destroy(gridContent.transform.GetChild(i).gameObject);
         }

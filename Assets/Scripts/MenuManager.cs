@@ -21,7 +21,6 @@ static public class MenuManager
 {
 
     static bool initialized = false;
-    static public Mini ActiveMini { get; set; }
 
     static public void Initialize()
     {
@@ -29,7 +28,7 @@ static public class MenuManager
 
         initialized = true;
 
-        ActiveMini = MiniCollection.Minis[0];
+        Mini.SetActiveMini(MiniCollection.Minis[0]);
     }
 
     
