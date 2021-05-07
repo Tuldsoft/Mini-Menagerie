@@ -5,24 +5,24 @@ using UnityEngine;
 
 
 // Used in the BrowseScene
-public class MiniListMonitor : ScrollListMonitor
+public class MiniListMonitor : ScrollListMonitor<Mini>
 {
 
-    [SerializeField]
-    GameObject prefabNewMiniPanel = null;
+    /*[SerializeField]
+    GameObject prefabNewMiniPanel = null;*/
 
     protected override void Start()
     {
-        // Load a panel template
+        // Load a panel templates
         prefabPanel = Resources.Load<GameObject>(@"Prefabs\prefabMiniPanel");
-        prefabNewMiniPanel = Resources.Load<GameObject>(@"Prefabs\prefabNewMiniPanel");
+        prefabNewPanel = Resources.Load<GameObject>(@"Prefabs\prefabNewMiniPanel");
+
+        referenceList = MiniCollection.Minis;  // used to populate the list
 
         base.Start();
-
-
     }
 
-    public override void PopulateGrid()
+    /*public override void PopulateGrid()
     {
         EmptyGrid();
 
@@ -41,6 +41,8 @@ public class MiniListMonitor : ScrollListMonitor
 
         listPanel.SetPanel(null, this);
 
-    }
+    }*/
 
+
+    
 }

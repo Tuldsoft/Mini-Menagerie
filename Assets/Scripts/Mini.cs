@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // public class Mini : IComparable
-public class Mini
+//public class Mini : IComparable<Mini>, IComparable
+public class Mini : IComparable<Mini>
 {
 
     // Publicly accessible for all scripts to reference 
@@ -18,7 +19,7 @@ public class Mini
 
     public Sprite Thumbnail { get; private set; } = null;
 
-
+    public List<Descriptor> Descriptors { get; private set; } = new List<Descriptor>();
 
     // long sortID;
     // public long SortID {get => sortID;}
@@ -39,15 +40,23 @@ public class Mini
 
         Thumbnail = Photos[0];
 
+        //Descriptors.Add(new Descriptor_Text());
+
     }
 
-
-    /*public int CompareTo(Mini mini)
+    public int CompareTo(Mini mini)
     {
-        if (mini == null) return 1;
+        // for now, just compare name strings
+        return Name.CompareTo(mini.Name);
+    }
 
-        return 0;
-        // compare by id, creation id, or by user sort
+    /*public int CompareTo(object obj)
+    {
+        if (obj != null && !(obj is Mini))
+            throw new ArgumentException("Object is not a Mini.");
+        
+        // for now, just compare name strings
+        return CompareTo(obj as Mini);
     }*/
 
     static public void SetActiveMini(Mini mini)
@@ -66,6 +75,16 @@ public class Mini
         // Utils.FormatString(ref name)
 
         Name = name;
+    }
+
+    public Descriptor AddDescriptor(Descriptor descr = null)
+    {
+        if (descr == null)
+            descr = new Descriptor_Text();
+
+        Descriptors.Add(descr);
+                
+        return descr;
     }
 
     // Override

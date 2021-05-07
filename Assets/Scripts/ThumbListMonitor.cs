@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ThumbListMonitor : ScrollListMonitor
+// Populates a ScrollList with Sprites, but a Sprite is no IComparable.
+// Override of PopulateList() is required. "Mini" is a placeholder for T, but is unused.
+
+public class ThumbListMonitor : ScrollListMonitor<Mini>
 {
     [SerializeField]
     public Image BigThumb = null;
@@ -16,11 +20,10 @@ public class ThumbListMonitor : ScrollListMonitor
         keepFirstPanel = false;
 
         base.Start();
-
+        
     }
 
-
-
+    // Sprite is not IComparable, so override
     public override void PopulateGrid()
     {
         EmptyGrid();
@@ -30,7 +33,7 @@ public class ThumbListMonitor : ScrollListMonitor
         foreach (Sprite sprite in Mini.ActiveMini.Photos)
         {
             newPanel = Instantiate(prefabPanel, gridContent.transform);
-            ScrollListPanel thumbPanel = newPanel.GetComponent<ScrollListPanel>();
+            ScrollListPanel<Mini> thumbPanel = newPanel.GetComponent<ScrollListPanel<Mini>>();
 
             thumbPanel.SetPanel(sprite, this);
         }

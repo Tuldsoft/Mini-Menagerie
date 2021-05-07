@@ -345,3 +345,5 @@ healthchecksdb
 /ProjectSettings
 /Temp
 /UserSettings
+/Assets/Fonts
+*.xcf

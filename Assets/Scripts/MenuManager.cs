@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public enum MenuName
 {
+    Menu,
     Browse,
     Descriptors,
     Tags,
@@ -22,13 +23,18 @@ static public class MenuManager
 
     static bool initialized = false;
 
+    static public Dictionary<MenuName, string> MenuNamesDict { get; private set; } 
+
     static public void Initialize()
     {
         if (initialized) return;
 
         initialized = true;
 
+        InitializeNames();
+
         Mini.SetActiveMini(MiniCollection.Minis[0]);
+
     }
 
     
@@ -42,6 +48,9 @@ static public class MenuManager
     {
         switch (choice)
         {
+            case MenuName.Menu:
+                Object.Instantiate(Resources.Load(@"Prefabs\Menus\prefabMenu"));
+                break;
             case MenuName.Browse:
                 SceneManager.LoadScene("BrowseScene");
                 break;
@@ -51,15 +60,15 @@ static public class MenuManager
                 break;
 
             case MenuName.Tags:
-                SceneManager.LoadScene("DescriptorsScene");
+                //SceneManager.LoadScene("DescriptorsScene");
                 break;
 
             case MenuName.Encounter_Builder:
-                SceneManager.LoadScene("EncountersScene");
+                //SceneManager.LoadScene("EncountersScene");
                 break;
 
             case MenuName.Collection_Stats:
-                SceneManager.LoadScene("StatsScene");
+                //SceneManager.LoadScene("StatsScene");
                 break;
 
             case MenuName.Help:
@@ -67,7 +76,7 @@ static public class MenuManager
                 break;
 
             case MenuName.About:
-                SceneManager.LoadScene("AboutScene");
+                //SceneManager.LoadScene("AboutScene");
                 break;
 
             case MenuName.Quit:
@@ -84,6 +93,20 @@ static public class MenuManager
                 Debug.Log("Unknown menu command.");
                 break;
         }
+    }
+
+    static void InitializeNames()
+    {
+        MenuNamesDict = new Dictionary<MenuName, string>();
+        
+        MenuNamesDict.Add(MenuName.Browse, "Browse");
+        MenuNamesDict.Add(MenuName.Descriptors, "Descriptors");
+        MenuNamesDict.Add(MenuName.Tags, "Tags");
+        MenuNamesDict.Add(MenuName.Encounter_Builder, "Encounter Builder");
+        MenuNamesDict.Add(MenuName.Collection_Stats, "Collection Stats");
+        MenuNamesDict.Add(MenuName.Help, "Help");
+        MenuNamesDict.Add(MenuName.About, "About");
+
     }
 }
 

@@ -3,18 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ScrollListMonitor : MonoBehaviour
+public abstract class ScrollListMonitor<T> : MonoBehaviour where T : IComparable<T>
 {
     #region Fields
 
     [SerializeField]
-    protected GameObject gridContent = null;
+    protected GameObject gridContent = null;     // set in Inspector
 
-    protected GameObject prefabPanel = null; // set by Start() in children
+    protected GameObject prefabPanel = null;     // set by Start() in children
+    protected GameObject prefabNewPanel = null;  // set by Start() in children, if used
 
-    protected List<IComparable> referenceList;
+    protected List<T> referenceList;             // set by Start() in children
 
-    protected bool keepFirstPanel = false;
+    protected bool keepFirstPanel = false;       // set by Start() in children
 
     #endregion
 
@@ -28,10 +29,32 @@ public abstract class ScrollListMonitor : MonoBehaviour
 
 
     // Fills the ScrollList with ScrollListPanels
-    public abstract void PopulateGrid();
-    // body must contain a foreach loop that iterates through a collection,
-    // instantiating new prefabs for each item in the collection.
-    
+    // Overridde in case T is not IComparable (ex. a Sprite)
+    // T is generally a Mini, a Descriptor, or a Tag (IComparables)
+    public virtual void PopulateGrid()
+    {
+        EmptyGrid();
+
+        GameObject newPanel;
+
+        foreach (T listItem in referenceList)
+        {
+            newPanel = Instantiate(prefabPanel, gridContent.transform);
+            ScrollListPanel<T> miniPanel = newPanel.GetComponent<ScrollListPanel<T>>();
+
+            // set up panel based on listItem info, and register this as its monitor
+            miniPanel.SetPanel(listItem, this); 
+        }
+
+        if (prefabNewPanel != null)
+        {
+            newPanel = Instantiate(prefabNewPanel, gridContent.transform);
+            ScrollListPanel<T> listPanel = newPanel.GetComponent<ScrollListPanel<T>>();
+
+            listPanel.SetPanel(null, this);
+        }
+    }
+
 
     // Empty the ScrollList
     protected void EmptyGrid()

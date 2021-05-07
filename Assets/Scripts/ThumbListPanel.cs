@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ThumbListPanel : ScrollListPanel
+// T is Mini, because it can't be a Sprite
+public class ThumbListPanel : ScrollListPanel<Mini>
 {
     Sprite sprite = null;
 
@@ -11,7 +12,7 @@ public class ThumbListPanel : ScrollListPanel
     Image thumbImage = null;
 
 
-    public override void SetPanel(object obj, ScrollListMonitor monitor)
+    public override void SetPanel(object obj, ScrollListMonitor<Mini> monitor)
     {
         base.SetPanel(obj, monitor);
 

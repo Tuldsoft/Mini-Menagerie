@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class MiniListPanel : ScrollListPanel
+public class MiniListPanel : ScrollListPanel<Mini>
 {
     Mini mini = null;
     
@@ -16,7 +16,7 @@ public class MiniListPanel : ScrollListPanel
     
 
 
-    public override void SetPanel(object obj, ScrollListMonitor monitor)
+    public override void SetPanel(object obj, ScrollListMonitor<Mini> monitor)
     {
         base.SetPanel(obj, monitor);
 

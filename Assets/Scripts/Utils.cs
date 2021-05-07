@@ -41,6 +41,11 @@ static public class Utils
         button.colors = Button_Colors;
     }
 
+    // InputFields have an Image as a parent
+    public static void SetInputFieldColors (InputField inputField)
+    {
+        inputField.transform.parent.GetComponent<Image>().color = Button_HighlightColor;
+    }
 
 
 }

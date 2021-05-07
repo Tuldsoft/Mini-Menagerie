@@ -5,7 +5,6 @@ static public class MiniCollection
 {
     static bool initialized = false;
 
-
     static public List<Mini> Minis { get; private set; } = new List<Mini>();
 
     static public void Initialize()

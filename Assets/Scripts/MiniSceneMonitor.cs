@@ -22,8 +22,16 @@ public class MiniSceneMonitor : MonoBehaviour
     void Start()
     {
         NameText.GetComponent<InputField>().text = Mini.ActiveMini.Name;
-        Debug.Log("MainscrollContent GridLayout cell width is: " +
-            MainScrollContent.GetComponent<GridLayoutGroup>().cellSize.x);
+
+        // Resize cell size X to expand/shrink to available area
+        float canvasX = GetComponent<RectTransform>().rect.width;
+        float cellSizeY = MainScrollContent.GetComponent<GridLayoutGroup>().cellSize.y;
+        float paddingX = MainScrollContent.GetComponent<GridLayoutGroup>().padding.left;
+        paddingX += MainScrollContent.GetComponent<GridLayoutGroup>().padding.right;
+        Vector2 newCellSize = new Vector2 ( canvasX - paddingX, cellSizeY );
+
+        MainScrollContent.GetComponent<GridLayoutGroup>().cellSize = newCellSize;
+
 
     }
 

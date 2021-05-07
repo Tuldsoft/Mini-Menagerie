@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewMiniListPanel : ScrollListPanel
+public class NewMiniListPanel : ScrollListPanel<Mini>
 {
 
     // SetPanel() does not need overwriting
