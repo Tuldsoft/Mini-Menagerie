@@ -14,15 +14,13 @@ public abstract class MiniDescrListPanel : ScrollListPanel<Descriptor>
     {
         base.SetPanel(obj, monitor);
 
-        if (!(obj is Descriptor setDescriptor))
-            return;
+        if (obj is Descriptor setDescriptor)
+        {
+            descriptor = setDescriptor;
+            nameText.text = descriptor.Name;
 
-        descriptor = setDescriptor;
-
-        nameText.text = descriptor.Name;
-
-        //Utils.SetButtonColors(gameObject.GetComponentInChildren<Button>());
-
+            //Utils.SetButtonColors(gameObject.GetComponentInChildren<Button>());
+        }
     }
 
     public void Panel_Click()

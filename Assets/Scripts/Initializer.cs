@@ -7,7 +7,9 @@ static public class Initializer
     static public void Initialize()
     {
         Utils.Initialize();
+        ImageUtils.Initialize();
         MiniCollection.Initialize();
+        // need a DescriptorCollection class...
         MenuManager.Initialize();
     }
 }

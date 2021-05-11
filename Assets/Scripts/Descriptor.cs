@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public enum DescrType
 {
@@ -94,10 +95,12 @@ public class Descriptor : IComparable<Descriptor>
 
     // Get from NameType
     public DescrType Type { get => nameType.Type; set => nameType.Type = value; }
-    
+    // public Sprite TypeSprite { get => GetSprite(Type); } // moved to ImageUtils
+
     public bool AlwaysShow { get; set; } = false;
 
     // Stores all Descriptors created, used in populating ScrollLists.
+    // Later, implement a DescriptorCollection class, like the MiniCollection class
     static List<Descriptor> masterList = new List<Descriptor>();
     static public List<Descriptor> List { get => masterList; }
 
@@ -119,8 +122,6 @@ public class Descriptor : IComparable<Descriptor>
     {
         masterList.Remove(descriptor);
     }
-
-    
 }
 
 
@@ -128,12 +129,18 @@ public class Descriptor_Text : Descriptor
 {
     public string DefaultText { get; set; } = "Default text";
     public string Text { get; set; } = "Default text";
+
+    public Descriptor_Text(string name = "Descriptor Name", DescrType type = DescrType.Text)
+        : base(name, DescrType.Text) { }
 }
 
 public class Descriptor_CheckBox : Descriptor
 {
     public bool DefaultIsChecked { get; set; } = false;
     public bool IsChecked { get; set; } = false;
+
+    public Descriptor_CheckBox(string name = "Descriptor Name", DescrType type = DescrType.Text)
+        : base(name, DescrType.CheckBox) { }
 }
 
 public class Descriptor_Number : Descriptor
@@ -186,7 +193,8 @@ public class Descriptor_Number : Descriptor
 
 
     // Constructor
-    public Descriptor_Number()
+    public Descriptor_Number(string name = "Descriptor Name", DescrType type = DescrType.Text)
+        : base(name, DescrType.Number)
     {
         Precision = 0;
         nums = new decimal?[Enum.GetNames(typeof(NumIndex)).Length];

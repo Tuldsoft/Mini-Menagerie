@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Parent of MiniListPanel, potentially others
+// Attaches to panels in Scrolllists. Maintains a reference to its monitor.
+// Has many children. Each child adds to the SetPanel() method.
 public abstract class ScrollListPanel<T> : MonoBehaviour where T : IComparable<T>
 {
     protected ScrollListMonitor<T> monitor = null; // Set by SetPanel()
