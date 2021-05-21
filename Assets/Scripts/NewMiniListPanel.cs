@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class NewMiniListPanel : ScrollListPanel<Mini>
@@ -10,7 +11,7 @@ public class NewMiniListPanel : ScrollListPanel<Mini>
     public void NewButton_Click()
     {
         MiniCollection.NewMini();
-        monitor.PopulateGrid();
+        monitor.PopulateGrid(true); // include ScrollToEnd()
     }
 
 }

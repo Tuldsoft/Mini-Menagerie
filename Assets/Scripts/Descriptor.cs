@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum DescrType
@@ -13,75 +14,63 @@ public enum DescrType
 
 public class Descriptor : IComparable<Descriptor>
 {
-    /// <summary>
-    /// Instead of just using Name, Descriptors have NameTypes, which includes both Name and DescrType. 
-    /// Only one combo of Name and Type is allowed, if another pair is generated, Name is appended
-    /// with an iterator.
-    /// </summary>
+    const string defaultName = "Descriptor Name";
+    const string defaultName_TXT = "Text Name";
+    const string defaultName_CHK = "Checkbox Name";
+    const string defaultName_NUM = "Number Name";
+    const string defaultName_TAG = "Tags Name";
+
     class NameType : IEquatable<NameType>
     {
-        // Master list of all NameTypes
-        static public List<NameType> masterList = new List<NameType>();
-
-        string origName;
-
         public DescrType Type { get; set; }
+        
+        string _name;
+        public string Name { 
+            get => suffix <= 0 ? _name : _name + " " + suffix; 
+            set => ValidateName(value); }
 
-        int nameIter = 0;
+        int suffix = 0;
 
-        string name
+        public NameType(string name = defaultName, DescrType type = DescrType.Text)
         {
-            get => nameIter <= 0 ? origName : origName + nameIter.ToString();
-            set
-            {
-                //ValidateString(ref value);
-                origName = value;
-                ValidateName(this);
-            }
+            this.Name = name; // Triggers ValidateName()
+            this.Type = type;
         }
 
-        public NameType(string name = "Nameless", DescrType type = DescrType.Text)
+        void ValidateName(string checkName)
         {
-            this.Type = type;
-            this.name = name; // triggers name validation
-            masterList.Add(this);
+            if (Name == checkName) return;
+            
+            List<string> names = new List<string>();
+
+            foreach (Descriptor descr in Descriptor.List)
+            {
+                if (Type == descr.Type)
+                    names.Add(descr.Name);
+            }
+            
+            _name = checkName;
+            suffix = 0;
+
+            while (names.Contains(Name))
+            {
+                suffix++;
+            }
+            
         }
 
         public bool Equals(NameType comparison)
         {
-            if (name == comparison.name && Type == comparison.Type)
+            if (Name == comparison.Name && Type == comparison.Type)
                 return true;
 
             return false;
         }
 
-        void ValidateString(ref string s)
+        public override string ToString()
         {
-            // StringUtils.ValidateString(s);
+            return Name;
         }
-
-        void ValidateName (NameType checkNameType)
-        {
-            while (masterList.Contains(checkNameType))
-            {
-                checkNameType.IncrementName();
-            }
-        }
-
-        public void IncrementName()
-        {
-            nameIter++;
-        }
-
-        public override string ToString() => name;
-
-        public void Rename(string newName)
-        {
-            masterList.Remove(this);
-            name = newName;
-            masterList.Add(this);
-        }
-
     }
 
     // Stores Name and Type
@@ -89,8 +78,8 @@ public class Descriptor : IComparable<Descriptor>
 
     // Get from NameType
     public string Name { 
-        get => nameType.ToString();
-        set => nameType.Rename(value);
+        get => nameType.Name;
+        set => nameType.Name = value;
     }  
 
     // Get from NameType
@@ -103,9 +92,10 @@ public class Descriptor : IComparable<Descriptor>
     // Later, implement a DescriptorCollection class, like the MiniCollection class
     static List<Descriptor> masterList = new List<Descriptor>();
     static public List<Descriptor> List { get => masterList; }
+    static public Descriptor ActiveDescr { get; private set; }
 
     // Constructor
-    public Descriptor (string name = "Descriptor Name", DescrType type = DescrType.Text)
+    public Descriptor (string name = defaultName, DescrType type = DescrType.Text)
     {
         this.nameType = new NameType(name, type); // stores both Name (edited) and Type
         masterList.Add(this);
@@ -118,10 +108,38 @@ public class Descriptor : IComparable<Descriptor>
         return Name.CompareTo(descr.Name);
     }
 
-    public void RemoveDescriptor(Descriptor descriptor)
+    static public void RemoveDescriptor(Descriptor descriptor)
     {
         masterList.Remove(descriptor);
     }
+
+    static public void CreateNew(DescrType type)
+    {
+        switch (type)
+        {
+            case DescrType.Text:
+                new Descriptor_Text(defaultName_TXT, type);
+                break;
+            case DescrType.CheckBox:
+                new Descriptor_CheckBox(defaultName_CHK, type);
+                break;
+            case DescrType.Number:
+                new Descriptor_Number(defaultName_NUM, type);
+                break;
+            case DescrType.Tags:
+                //new Descriptor_Tags(defaultName_TAG, type);
+                break;
+            default:
+                new Descriptor_Text(defaultName_TXT, type);
+                break;
+        }
+    }
+
+    static public void SetActive(Descriptor descr)
+    {
+        ActiveDescr = descr;
+    }
+    
 }
 
 

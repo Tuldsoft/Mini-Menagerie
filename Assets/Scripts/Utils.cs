@@ -37,8 +37,11 @@ static public class Utils
 
     public static void SetButtonColors (Button button)
     {
-        button.transform.GetComponent<Image>().color = Button_ImageColor;
-        button.colors = Button_Colors;
+        if (button != null)
+        {
+            button.transform.GetComponent<Image>().color = Button_ImageColor;
+            button.colors = Button_Colors;
+        }
     }
 
     // InputFields have an Image as a parent

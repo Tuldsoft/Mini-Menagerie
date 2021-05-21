@@ -21,6 +21,11 @@ public class MenuMonitor : MonoBehaviour
     [SerializeField]
     Text menuItemTemplate = null;
 
+    [SerializeField]
+    GameObject menuScroll = null;
+
+    MenuType menuType = MenuType.Main;
+    bool anchorLeft = true;
 
     const int MenuItemsCount = 7;
     List<MenuItem> menuItems = new List<MenuItem>();
@@ -35,13 +40,9 @@ public class MenuMonitor : MonoBehaviour
      * 6 - About
     */
 
-    public void Start()
+    public void SetMenu(MenuType type = MenuType.Main)
     {
-        SetMenu();
-    }
-
-    public void SetMenu()
-    {
+        
         // get info from template
         Vector2 position = menuItemTemplate.transform.localPosition;
         float height = menuItemTemplate.rectTransform.rect.height * menuItemTemplate.rectTransform.localScale.y;
@@ -51,7 +52,25 @@ public class MenuMonitor : MonoBehaviour
 
         //float maxWidth = 0f;
 
-        foreach (KeyValuePair<MenuName, string> pair in MenuManager.MenuNamesDict)
+        menuType = type;
+        Dictionary<MenuName, string> dict;
+
+        // retrieve appropriate dictionary
+        switch (menuType)
+        {
+            case MenuType.Main:
+                dict = MenuManager.MainMenuNames;
+                break;
+            case MenuType.Descr:
+                dict = MenuManager.NewDescrNames;
+                anchorLeft = false;
+                break;
+            default:
+                dict = MenuManager.MainMenuNames;
+                break;
+        }
+
+        foreach (KeyValuePair<MenuName, string> pair in dict)
         {
 
             GameObject newMenuItem = Instantiate(menuItemTemplate.gameObject);
@@ -63,7 +82,7 @@ public class MenuMonitor : MonoBehaviour
             //maxWidth = Mathf.Max(Mathf.Abs(rectT.sizeDelta.x * rectT.localScale.x), maxWidth);
 
             MenuItem menuItem = newMenuItem.GetComponent<MenuItem>();
-            menuItem.SetMenuItem(pair.Key, this);
+            menuItem.SetMenuItem(pair.Key, pair.Value, this);
 
             menuItems.Add(menuItem);
 
@@ -87,13 +106,24 @@ public class MenuMonitor : MonoBehaviour
         if (scrollWidth < maxWidth)
             rt.sizeDelta = new Vector2(maxWidth, rt.sizeDelta.y);*/
 
+        // position MenuScroll left or right
+        if (!anchorLeft)
+        {
+            RectTransform msRT = menuScroll.GetComponent<RectTransform>();
+            msRT.anchorMin = new Vector2(1f, 1f);
+            msRT.anchorMax = new Vector2(1f, 1f);
+            Vector2 aPos = msRT.anchoredPosition;
+            aPos.x = -aPos.x - msRT.sizeDelta.x;
+            msRT.anchoredPosition = aPos;
+        }
 
     }
 
 
     public void CloseMenu()
     {
-        Destroy(gameObject);
+        MenuManager.CloseMenu(gameObject);
+        //Destroy(gameObject);
     }
 
 

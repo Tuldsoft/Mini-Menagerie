@@ -15,7 +15,18 @@ public enum MenuName
     Help,
     About,
     Quit,
-    View_Mini
+    View_Mini,
+    NewDescr,
+    NewDescrText,
+    NewDescrCheckBox,
+    NewDescrNumber,
+    NewDescrTags,
+    DescrDetails
+}
+public enum MenuType
+{
+    Main,
+    Descr
 }
 
 static public class MenuManager
@@ -23,7 +34,37 @@ static public class MenuManager
 
     static bool initialized = false;
 
-    static public Dictionary<MenuName, string> MenuNamesDict { get; private set; } 
+    static public Dictionary<MenuName, string> MainMenuNames { get; private set; } 
+    static public Dictionary<MenuName, string> NewDescrNames { get; private set; }
+
+    static GameObject prefabMenu = null;
+    static GameObject prefabDescrDetails_TXT = null;
+    static GameObject prefabDescrDetails_CHK = null;
+    static GameObject prefabDescrDetails_NUM = null;
+    static GameObject prefabDescrDetails_TAG = null;
+
+    static GameObject PrefabDescrDetails
+    {
+        get
+        {
+            switch (Descriptor.ActiveDescr.Type)
+            {
+                case DescrType.Text:
+                    return prefabDescrDetails_TXT;
+                case DescrType.CheckBox:
+                    return prefabDescrDetails_CHK;
+                case DescrType.Number:
+                    return prefabDescrDetails_NUM;
+                case DescrType.Tags:
+                    return prefabDescrDetails_TAG;
+                default:
+                    return prefabDescrDetails_TXT;
+            }
+        }
+    }
+
+
+    static bool menuOpen = false;
 
     static public void Initialize()
     {
@@ -35,8 +76,17 @@ static public class MenuManager
 
         Mini.SetActiveMini(MiniCollection.Minis[0]);
 
+        LoadPrefabs();
     }
 
+    static void LoadPrefabs()
+    {
+        prefabMenu = Resources.Load<GameObject>(@"Prefabs\Menus\prefabMenu");
+        prefabDescrDetails_TXT = Resources.Load<GameObject>(@"Prefabs\DescrScene\prefabDescrDetails_TXT");
+        prefabDescrDetails_CHK = Resources.Load<GameObject>(@"Prefabs\DescrScene\prefabDescrDetails_CHK");
+        prefabDescrDetails_NUM = Resources.Load<GameObject>(@"Prefabs\DescrScene\prefabDescrDetails_NUM");
+        prefabDescrDetails_TAG = Resources.Load<GameObject>(@"Prefabs\DescrScene\prefabDescrDetails_TAG");
+    }
     
     // Switchboard for most menu transitions, either through moving to a new scene
     // or by instantiating a overlay menu prefab
@@ -49,7 +99,7 @@ static public class MenuManager
         switch (choice)
         {
             case MenuName.Menu:
-                Object.Instantiate(Resources.Load(@"Prefabs\Menus\prefabMenu"));
+                LaunchMenu();
                 break;
             case MenuName.Browse:
                 SceneManager.LoadScene("BrowseScene");
@@ -85,8 +135,32 @@ static public class MenuManager
                 Debug.Log("You have quit the game.");
                 break;
 
+            //Called from BrowseScene
             case MenuName.View_Mini:
                 SceneManager.LoadScene("MiniScene");
+                break;
+
+            // Called from DescrScene
+            case MenuName.NewDescr:
+                LaunchMenu(MenuType.Descr);
+                break;
+
+            case MenuName.NewDescrText:
+                Descriptor.CreateNew(DescrType.Text); // MenuMonitor and MenuItem take it from here
+                break;
+            case MenuName.NewDescrCheckBox:
+                Descriptor.CreateNew(DescrType.CheckBox);
+                break;
+            case MenuName.NewDescrNumber:
+                Descriptor.CreateNew(DescrType.Number);
+                break;
+            case MenuName.NewDescrTags:
+                Descriptor.CreateNew(DescrType.Tags);
+                break;
+
+            case MenuName.DescrDetails:
+                menuOpen = true;
+                GameObject.Instantiate(PrefabDescrDetails);
                 break;
 
             default:
@@ -97,16 +171,40 @@ static public class MenuManager
 
     static void InitializeNames()
     {
-        MenuNamesDict = new Dictionary<MenuName, string>();
+        MainMenuNames = new Dictionary<MenuName, string>();
         
-        MenuNamesDict.Add(MenuName.Browse, "Browse");
-        MenuNamesDict.Add(MenuName.Descriptors, "Descriptors");
-        MenuNamesDict.Add(MenuName.Tags, "Tags");
-        MenuNamesDict.Add(MenuName.Encounter_Builder, "Encounter Builder");
-        MenuNamesDict.Add(MenuName.Collection_Stats, "Collection Stats");
-        MenuNamesDict.Add(MenuName.Help, "Help");
-        MenuNamesDict.Add(MenuName.About, "About");
+        MainMenuNames.Add(MenuName.Browse, "Browse");
+        MainMenuNames.Add(MenuName.Descriptors, "Descriptors");
+        MainMenuNames.Add(MenuName.Tags, "Tags");
+        MainMenuNames.Add(MenuName.Encounter_Builder, "Encounter Builder");
+        MainMenuNames.Add(MenuName.Collection_Stats, "Collection Stats");
+        MainMenuNames.Add(MenuName.Help, "Help");
+        MainMenuNames.Add(MenuName.About, "About");
 
+        NewDescrNames = new Dictionary<MenuName, string>();
+
+        NewDescrNames.Add(MenuName.NewDescrText, "Text");
+        NewDescrNames.Add(MenuName.NewDescrCheckBox, "Check Box");
+        NewDescrNames.Add(MenuName.NewDescrNumber, "Number");
+        NewDescrNames.Add(MenuName.NewDescrTags, "Tags");
+    }
+
+    static void LaunchMenu(MenuType type = MenuType.Main)
+    {
+        menuOpen = true;
+        GameObject menu = GameObject.Instantiate(prefabMenu);
+        menu.GetComponentInChildren<MenuMonitor>().SetMenu(type);
+    }
+
+    static public void CloseMenu(GameObject menuObj)
+    {
+        Object.Destroy(menuObj);
+        menuOpen = false;
+    }
+
+    static public bool MenuOpen()
+    {
+        return menuOpen;
     }
 }
 

@@ -10,6 +10,72 @@ class CuttingRoom
     
 }
 
+// This implementation of NameType was improperly storing and renaming names like "ted 1 1 1"
+/*
+class NameType : IEquatable<NameType>
+{
+    // Master list of all NameTypes
+    static public List<NameType> nameTypes = new List<NameType>();
+
+    string origName;
+
+    public DescrType Type { get; set; }
+
+    int nameIter = 0;
+
+    string name
+    {
+        get => nameIter <= 0 ? origName : origName + " " + nameIter.ToString();
+        set
+        {
+            origName = value;
+            ValidateName(this);
+        }
+    }
+
+    public NameType(string name = defaultName, DescrType type = DescrType.Text)
+    {
+        this.Type = type;
+        this.Rename(name); // triggers name validation
+                            //masterList.Add(this);
+    }
+
+    public bool Equals(NameType comparison)
+    {
+        if (name == comparison.name && Type == comparison.Type)
+            return true;
+
+        return false;
+    }
+
+    void ValidateString(ref string s)
+    {
+        // StringUtils.ValidateString(s);
+    }
+
+    void ValidateName(NameType checkNameType)
+    {
+        while (nameTypes.Contains(checkNameType))
+        {
+            checkNameType.IncrementName();
+        }
+    }
+
+    public void IncrementName()
+    {
+        nameIter++;
+    }
+
+    public override string ToString() => name;
+
+    public void Rename(string newName)
+    {
+        nameTypes.Remove(this);
+        name = newName;
+        nameTypes.Add(this);
+    }
+}*/
+
 
 /// <summary>
 /// The below experiment used DNum and DNums as a standin for a value that could be either 

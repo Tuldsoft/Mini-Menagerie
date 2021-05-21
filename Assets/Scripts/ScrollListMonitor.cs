@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class ScrollListMonitor<T> : MonoBehaviour where T : IComparable<T>
 {
@@ -23,9 +24,9 @@ public abstract class ScrollListMonitor<T> : MonoBehaviour where T : IComparable
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        PopulateGrid();
+        PopulateGrid(false); // scroll to top at start
     }
-       
+
 
 
     // Fills the ScrollList with ScrollListPanels
@@ -35,24 +36,53 @@ public abstract class ScrollListMonitor<T> : MonoBehaviour where T : IComparable
     {
         EmptyGrid();
 
-        GameObject newPanel;
+        //GameObject newPanel;
 
         foreach (T listItem in referenceList)
         {
-            newPanel = Instantiate(prefabPanel, gridContent.transform);
-            ScrollListPanel<T> miniPanel = newPanel.GetComponent<ScrollListPanel<T>>();
-
-            // set up panel based on listItem info, and register this as its monitor
-            miniPanel.SetPanel(listItem, this); 
+            AddToGrid(listItem, prefabPanel);
         }
 
         if (prefabNewPanel != null)
         {
-            newPanel = Instantiate(prefabNewPanel, gridContent.transform);
-            ScrollListPanel<T> listPanel = newPanel.GetComponent<ScrollListPanel<T>>();
-
-            listPanel.SetPanel(null, this);
+            AddToGrid(default, prefabNewPanel);
         }
+
+    }
+
+    // overload to scroll to end
+    public virtual void PopulateGrid(bool scrollToEnd)
+    {
+        PopulateGrid();
+
+        StartCoroutine(ScrollToEnd(scrollToEnd));
+    }
+
+    public virtual void AddToGrid(T listItem, GameObject prefab = null)
+    {
+        prefab ??= prefabPanel;
+        
+        GameObject newPanel;
+
+        newPanel = Instantiate(prefab, gridContent.transform);
+        ScrollListPanel<T> panel = newPanel.GetComponent<ScrollListPanel<T>>();
+
+        // set up panel based on listItem info, and register this as its monitor
+        panel.SetPanel(listItem, this);
+
+        // waits for next frame to load before scrolling to end.
+        StartCoroutine(ScrollToEnd());
+    }
+
+    // need to run this in the next frame
+    IEnumerator ScrollToEnd(bool toEnd = true)
+    {
+        yield return new WaitForEndOfFrame();
+        ScrollRect sr = 
+            gridContent.transform.parent.transform.parent.GetComponent<ScrollRect>();
+        sr.verticalNormalizedPosition = toEnd ? 0f : 1f;
+
+        yield return null;
     }
 
 

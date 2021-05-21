@@ -26,7 +26,24 @@ public class DescrListPanel : ScrollListPanel<Descriptor>
             //default image is included in the prefab
             //trashbutton image is included in the prefab
             
-            //Utils.SetButtonColors(trashbutton.GetComponent<Button>());
+            // below code only used for text buttons, sets background colors
+            //Utils.SetButtonColors(nameText.GetComponentInChildren<Button>());
+
         }
+    }
+
+    public void Panel_Click()
+    {
+        Descriptor.SetActive(descriptor);
+        MenuManager.GoToMenu(MenuName.DescrDetails);
+
+        StartCoroutine(WaitForClose());
+    }
+
+    IEnumerator WaitForClose()
+    {
+        yield return new WaitWhile(MenuManager.MenuOpen);
+        monitor.PopulateGrid();
+        yield return null;
     }
 }

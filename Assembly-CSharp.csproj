@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\Initializer.cs" />
     <Compile Include="Assets\Scripts\MiniDescrListPanel_Number.cs" />
     <Compile Include="Assets\Scripts\Utils.cs" />
+    <Compile Include="Assets\Scripts\ImageUtils.cs" />
     <Compile Include="Assets\Scripts\DescrListPanel.cs" />
     <Compile Include="Assets\Scripts\Descriptor.cs" />
     <Compile Include="Assets\Scripts\MiniID.cs" />
@@ -84,7 +85,8 @@
     <Compile Include="Assets\Scripts\MiniDescrListMonitor.cs" />
     <Compile Include="Assets\Scripts\CuttingRoom.cs" />
     <Compile Include="Assets\Scripts\MiniListPanel.cs" />
-    <Compile Include="Assets\Scripts\ImageUtils.cs" />
+    <Compile Include="Assets\Scripts\DescrDetailsMonitor.cs" />
+    <Compile Include="Assets\Scripts\DescrDetailsMonitor_TXT.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

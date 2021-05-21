@@ -8,13 +8,11 @@ public class MenuItem : MonoBehaviour
     MenuName menuName = MenuName.Browse;
     MenuMonitor monitor = null;
 
-    public void SetMenuItem(MenuName menuName, MenuMonitor monitor)
+    public void SetMenuItem(MenuName menuName, string displayText, MenuMonitor monitor)
     {
-        gameObject.GetComponent<Text>().text = MenuManager.MenuNamesDict[menuName];
+        gameObject.GetComponent<Text>().text = displayText;
         this.menuName = menuName;
         this.monitor = monitor;
-
-        
     }
 
     public void MenuItem_Click()
