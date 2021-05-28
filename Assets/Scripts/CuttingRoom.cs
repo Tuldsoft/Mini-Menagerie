@@ -10,6 +10,79 @@ class CuttingRoom
     
 }
 
+// Attempting now to abandon the use of NameType, as it is proving unreliable
+// for identifying and recreating Descriptors to attach to Minis
+/*class NameType : IEquatable<NameType>
+{
+    public DescrType Type { get; set; }
+
+    string _name;
+    public string Name
+    {
+        get => suffix <= 0 ? _name : _name + " " + suffix;
+        set => ValidateName(value);
+    }
+
+    int suffix = 0;
+
+    public NameType(string name = defaultName, DescrType type = DescrType.Text)
+    {
+        this.Name = name; // Triggers ValidateName()
+        this.Type = type;
+    }
+
+    void ValidateName(string checkName)
+    {
+        if (Name == checkName) return;
+
+        List<string> names = new List<string>();
+
+        foreach (Descriptor descr in Descriptor.List)
+        {
+            if (Type == descr.Type)
+                names.Add(descr.Name);
+        }
+
+        _name = checkName;
+        suffix = 0;
+
+        while (names.Contains(Name))
+        {
+            suffix++;
+        }
+
+    }
+
+    public bool Equals(NameType comparison)
+    {
+        if (Name == comparison.Name && Type == comparison.Type)
+            return true;
+
+        return false;
+    }
+
+    public override string ToString()
+    {
+        return Name;
+    }
+}
+
+// Stores Name and Type
+NameType nameType;
+
+// Get from NameType
+    public string Name { 
+        get => nameType.Name;
+        set => nameType.Name = value;
+    }  
+
+    // Get from NameType
+    public DescrType Type { get => nameType.Type; set => nameType.Type = value; }
+    // public Sprite TypeSprite { get => GetSprite(Type); } // moved to ImageUtils
+ 
+ */
+
+
 // This implementation of NameType was improperly storing and renaming names like "ted 1 1 1"
 /*
 class NameType : IEquatable<NameType>

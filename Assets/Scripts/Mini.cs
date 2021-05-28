@@ -19,7 +19,7 @@ public class Mini : IComparable<Mini>
 
     public Sprite Thumbnail { get; private set; } = null;
 
-    public List<Descriptor> Descriptors { get; private set; } = new List<Descriptor>();
+    public DescrCollection Descriptors { get; private set; } = new DescrCollection();
 
     // long sortID;
     // public long SortID {get => sortID;}
@@ -82,7 +82,13 @@ public class Mini : IComparable<Mini>
         if (descr == null)
             descr = new Descriptor_Text();
 
-        Descriptors.Add(descr);
+
+
+        // add logic here for copying from the Descriptor.List
+        // 
+
+
+        Descriptors.AddDescr(descr);
                 
         return descr;
     }

@@ -6,11 +6,12 @@ using UnityEngine.UI;
 public class DescrListPanel : ScrollListPanel<Descriptor>
 {
     [SerializeField]
-    Text nameText;
+    protected Text nameText;
     [SerializeField]
-    Image typeImage, radiantImage, defaultImage, trashbutton;
+    protected Image typeImage, radiantImage, defaultImage, trashbutton;
 
-    Descriptor descriptor = null;
+    protected Descriptor descriptor = null;
+    bool isPickerPanel = false;
 
     public override void SetPanel(object obj, ScrollListMonitor<Descriptor> monitor)
     {
@@ -25,19 +26,47 @@ public class DescrListPanel : ScrollListPanel<Descriptor>
             radiantImage.enabled = d.AlwaysShow;
             //default image is included in the prefab
             //trashbutton image is included in the prefab
-            
-            // below code only used for text buttons, sets background colors
-            //Utils.SetButtonColors(nameText.GetComponentInChildren<Button>());
+
+            if (monitor is DescrPickerMonitor)
+                SetAsPickerPanel();
 
         }
     }
 
-    public void Panel_Click()
+    void SetAsPickerPanel()
     {
-        Descriptor.SetActive(descriptor);
-        MenuManager.GoToMenu(MenuName.DescrDetails);
+        isPickerPanel = true;
 
-        StartCoroutine(WaitForClose());
+        // remove trash button and shift type and default to the right
+        trashbutton.enabled = false;
+        typeImage.GetComponent<RectTransform>().anchoredPosition
+            += new Vector2(100f, 0f);
+
+        radiantImage.transform.parent.gameObject.transform.localPosition
+            += new Vector3(100f, 0f);
+        nameText.GetComponent<RectTransform>().offsetMax += new Vector2(100f, 0f);
+        
+    }
+
+
+    public virtual void Panel_Click()
+    {
+        if (isPickerPanel)
+        {
+            Mini.ActiveMini.AddDescriptor(Descriptor.Copy(descriptor));
+
+            //monitor.PopulateGrid(true); // scroll to end
+
+            // PickerList -> Canvas -> prefab
+            MenuManager.CloseMenu(monitor.gameObject.transform.parent.transform.parent.gameObject);
+        }
+        else
+        {
+            Descriptor.SetActive(descriptor);
+            MenuManager.GoToMenu(MenuName.DescrDetails);
+
+            StartCoroutine(WaitForClose());
+        }
     }
 
     IEnumerator WaitForClose()

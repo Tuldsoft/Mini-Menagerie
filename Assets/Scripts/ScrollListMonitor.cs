@@ -14,7 +14,7 @@ public abstract class ScrollListMonitor<T> : MonoBehaviour where T : IComparable
     protected GameObject prefabPanel = null;     // set by Start() in children
     protected GameObject prefabNewPanel = null;  // set by Start() in children, if used
 
-    protected List<T> referenceList;             // set by Start() in children
+    protected IEnumerable<T> referenceList;             // set by Start() in children
 
     protected bool keepFirstPanel = false;       // set by Start() in children
 

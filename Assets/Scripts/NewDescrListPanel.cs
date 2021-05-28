@@ -9,28 +9,16 @@ public class NewDescrListPanel : ScrollListPanel<Descriptor>
 
     public void NewButton_Click()
     {
-        // Replace later with a Descr picker
+        MenuManager.GoToMenu(MenuName.DescrPicker);
 
-        switch ((monitor as MiniDescrListMonitor).defaultNewType)
-        {
-            case DescrType.Text:
-                Mini.ActiveMini.AddDescriptor(new Descriptor_Text());
-                break;
-            case DescrType.CheckBox:
-                Mini.ActiveMini.AddDescriptor(new Descriptor_CheckBox());
-                break;
-            case DescrType.Number:
-                Mini.ActiveMini.AddDescriptor(new Descriptor_Number());
-                break;
-            case DescrType.Tags:
-                //Mini.ActiveMini.AddDescriptor(new Descriptor_Tags());
-                break;
-            default:
-                Mini.ActiveMini.AddDescriptor(new Descriptor_Text());
-                break;
-        }
+        StartCoroutine(WaitForClose());
+    }
 
+    IEnumerator WaitForClose()
+    {
+        yield return new WaitWhile(MenuManager.MenuOpen);
         monitor.PopulateGrid();
+        yield return null;
     }
 
 }

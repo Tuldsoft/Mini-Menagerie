@@ -18,7 +18,7 @@ public class MiniDescrListMonitor : ScrollListMonitor<Descriptor>
     protected override void Start()
     {
         keepFirstPanel = true; // first panel is thumbnail carousel
-        referenceList = Mini.ActiveMini.Descriptors; // used to populate the list
+        referenceList = Mini.ActiveMini.Descriptors.List; // used to populate the list
 
         // Load panel templates
         templatePanel_Text = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabDescrPanel_Text");

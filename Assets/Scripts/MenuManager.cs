@@ -16,6 +16,7 @@ public enum MenuName
     About,
     Quit,
     View_Mini,
+    DescrPicker,
     NewDescr,
     NewDescrText,
     NewDescrCheckBox,
@@ -38,10 +39,12 @@ static public class MenuManager
     static public Dictionary<MenuName, string> NewDescrNames { get; private set; }
 
     static GameObject prefabMenu = null;
+    static GameObject prefabDescrPicker = null;
     static GameObject prefabDescrDetails_TXT = null;
     static GameObject prefabDescrDetails_CHK = null;
     static GameObject prefabDescrDetails_NUM = null;
     static GameObject prefabDescrDetails_TAG = null;
+
 
     static GameObject PrefabDescrDetails
     {
@@ -82,6 +85,7 @@ static public class MenuManager
     static void LoadPrefabs()
     {
         prefabMenu = Resources.Load<GameObject>(@"Prefabs\Menus\prefabMenu");
+        prefabDescrPicker = Resources.Load<GameObject>(@"Prefabs\Menus\prefabDescrPicker");
         prefabDescrDetails_TXT = Resources.Load<GameObject>(@"Prefabs\DescrScene\prefabDescrDetails_TXT");
         prefabDescrDetails_CHK = Resources.Load<GameObject>(@"Prefabs\DescrScene\prefabDescrDetails_CHK");
         prefabDescrDetails_NUM = Resources.Load<GameObject>(@"Prefabs\DescrScene\prefabDescrDetails_NUM");
@@ -139,6 +143,13 @@ static public class MenuManager
             case MenuName.View_Mini:
                 SceneManager.LoadScene("MiniScene");
                 break;
+
+            // Called from MiniScene
+            case MenuName.DescrPicker:
+                menuOpen = true;
+                GameObject.Instantiate(prefabDescrPicker);
+                break;
+
 
             // Called from DescrScene
             case MenuName.NewDescr:

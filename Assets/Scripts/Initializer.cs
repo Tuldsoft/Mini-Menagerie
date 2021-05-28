@@ -9,7 +9,7 @@ static public class Initializer
         Utils.Initialize();
         ImageUtils.Initialize();
         MiniCollection.Initialize();
-        // need a DescriptorCollection class...
+        Descriptor.Initialize();
         MenuManager.Initialize();
     }
 }

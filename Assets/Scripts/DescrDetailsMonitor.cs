@@ -35,7 +35,12 @@ public class DescrDetailsMonitor : MonoBehaviour
 
     public void Name_Enter(string value)
     {
-        descr.Name = value;
+        // attempt rename
+        
+        if (!descr.Rename(value))
+        {
+            Debug.Log("Name already in use");
+        }
         nameInput.text = descr.Name;
     }
 }

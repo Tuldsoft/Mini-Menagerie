@@ -12,7 +12,39 @@ public enum DescrType
     Tags
 }
 
-public class Descriptor : IComparable<Descriptor>
+public class DescrID
+{
+    Guid id;
+
+    public string ID { get => id.ToString(); }
+
+    public long IDNumber { get; private set; }
+
+    static public long TotalCreated { get; private set; }
+
+
+    // Constructor
+    public DescrID()
+    {
+        SetID(Guid.NewGuid());
+        TotalCreated++;
+        IDNumber = TotalCreated;
+    }
+
+    // Methods
+    void SetID(Guid newGuid)
+    {
+        id = newGuid;
+    }
+
+    /*public string CreateID ()
+    {
+        Guid newGuid = Guid.NewGuid();
+        return newGuid.ToString();
+    }*/
+}
+
+public class Descriptor : IComparable<Descriptor>, IEquatable<Descriptor>
 {
     const string defaultName = "Descriptor Name";
     const string defaultName_TXT = "Text Name";
@@ -20,97 +52,106 @@ public class Descriptor : IComparable<Descriptor>
     const string defaultName_NUM = "Number Name";
     const string defaultName_TAG = "Tags Name";
 
-    class NameType : IEquatable<NameType>
-    {
-        public DescrType Type { get; set; }
-        
-        string _name;
-        public string Name { 
-            get => suffix <= 0 ? _name : _name + " " + suffix; 
-            set => ValidateName(value); }
+    public Guid ID { get; private set; } 
 
-        int suffix = 0;
+    public string Name { get; private set; }
 
-        public NameType(string name = defaultName, DescrType type = DescrType.Text)
-        {
-            this.Name = name; // Triggers ValidateName()
-            this.Type = type;
-        }
-
-        void ValidateName(string checkName)
-        {
-            if (Name == checkName) return;
-            
-            List<string> names = new List<string>();
-
-            foreach (Descriptor descr in Descriptor.List)
-            {
-                if (Type == descr.Type)
-                    names.Add(descr.Name);
-            }
-            
-            _name = checkName;
-            suffix = 0;
-
-            while (names.Contains(Name))
-            {
-                suffix++;
-            }
-            
-        }
-
-        public bool Equals(NameType comparison)
-        {
-            if (Name == comparison.Name && Type == comparison.Type)
-                return true;
-
-            return false;
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
-    }
-
-    // Stores Name and Type
-    NameType nameType;
-
-    // Get from NameType
-    public string Name { 
-        get => nameType.Name;
-        set => nameType.Name = value;
-    }  
-
-    // Get from NameType
-    public DescrType Type { get => nameType.Type; set => nameType.Type = value; }
-    // public Sprite TypeSprite { get => GetSprite(Type); } // moved to ImageUtils
+    public DescrType Type { get; set; }
 
     public bool AlwaysShow { get; set; } = false;
+    public bool IsMaster { get; private set; } = true;
+
 
     // Stores all Descriptors created, used in populating ScrollLists.
     // Later, implement a DescriptorCollection class, like the MiniCollection class
-    static List<Descriptor> masterList = new List<Descriptor>();
-    static public List<Descriptor> List { get => masterList; }
+    static bool initialized = false;
+
+    static DescrCollection collection = new DescrCollection();
+    static public List<Descriptor> List { get => collection.List; }
+    static public IEnumerable<string> Names { 
+        get
+        {
+            IEnumerable<string> names =
+            from descr in List
+            select descr.Name;
+
+            return names;
+        } 
+    }
+
+
     static public Descriptor ActiveDescr { get; private set; }
 
-    // Constructor
+    // Constructor for unique Descriptors
     public Descriptor (string name = defaultName, DescrType type = DescrType.Text)
     {
-        this.nameType = new NameType(name, type); // stores both Name (edited) and Type
-        masterList.Add(this);
+        int i = 1;
+        string testName = name;
+        while (!Rename(testName))
+        {
+            testName = $"{name} ({i++})";
+        }
+
+        Type = type;
+        ID = Guid.NewGuid();
+        if (collection.AddDescr(this))
+            IsMaster = true; // Adds unique descr to the static collection
+    }
+
+    // Copy Constructor for putting Descriptors on Minis
+    public Descriptor (Descriptor descr)
+    {
+        this.Name = descr.Name;
+        this.Type = descr.Type;
+        this.ID = descr.ID;
+        this.AlwaysShow = descr.AlwaysShow;
+        this.IsMaster = false;
     }
 
     // IComparable implementation: Compare NameType
     public int CompareTo(Descriptor descr)
     {
-        // for now, just compare names. Later, implement user sorting.
-        return Name.CompareTo(descr.Name);
+        // Later, implement user-defined sorting.
+        
+        // For now, compare IDs
+        return ID.CompareTo(descr.ID);
     }
+
+    // IEquatable implementation, for determining if a Descriptor exists in a List.
+    public bool Equals(Descriptor descr)
+    {
+        return (ID == descr.ID);
+    }
+    
+    // Returns false if Name is already in use in master list
+    // Renaming only used by DescrListPanel
+    public bool Rename(string name)
+    {
+        if (Names.Contains(name))
+            return false;
+
+        Name = name;
+        return true;
+    }
+
+
+    static public void Initialize()
+    {
+        if (initialized) return;
+        
+        initialized = true;
+        CreateNew(DescrType.Text);
+        CreateNew(DescrType.Text);
+        CreateNew(DescrType.Text);
+        CreateNew(DescrType.Text);
+        CreateNew(DescrType.Text);
+
+    }
+
 
     static public void RemoveDescriptor(Descriptor descriptor)
     {
-        masterList.Remove(descriptor);
+        collection.RemoveDescr(descriptor);
     }
 
     static public void CreateNew(DescrType type)
@@ -135,6 +176,12 @@ public class Descriptor : IComparable<Descriptor>
         }
     }
 
+    // Makes use of copy constructor
+    static public Descriptor Copy(Descriptor descr)
+    {
+        return collection.CopyDescr(descr);
+    }
+
     static public void SetActive(Descriptor descr)
     {
         ActiveDescr = descr;
@@ -149,7 +196,16 @@ public class Descriptor_Text : Descriptor
     public string Text { get; set; } = "Default text";
 
     public Descriptor_Text(string name = "Descriptor Name", DescrType type = DescrType.Text)
-        : base(name, DescrType.Text) { }
+        : base(name, DescrType.Text) 
+    {
+        Text = DefaultText;
+    }
+
+    public Descriptor_Text(Descriptor_Text descr) : base(descr)
+    {
+        this.DefaultText = descr.DefaultText;
+        this.Text = descr.DefaultText;
+    }
 }
 
 public class Descriptor_CheckBox : Descriptor
@@ -157,8 +213,14 @@ public class Descriptor_CheckBox : Descriptor
     public bool DefaultIsChecked { get; set; } = false;
     public bool IsChecked { get; set; } = false;
 
-    public Descriptor_CheckBox(string name = "Descriptor Name", DescrType type = DescrType.Text)
+    public Descriptor_CheckBox(string name = "Descriptor Name", DescrType type = DescrType.CheckBox)
         : base(name, DescrType.CheckBox) { }
+
+    public Descriptor_CheckBox(Descriptor_CheckBox descr) : base(descr)
+    {
+        this.DefaultIsChecked = descr.DefaultIsChecked;
+        this.IsChecked = descr.IsChecked;
+    }
 }
 
 public class Descriptor_Number : Descriptor
@@ -211,7 +273,7 @@ public class Descriptor_Number : Descriptor
 
 
     // Constructor
-    public Descriptor_Number(string name = "Descriptor Name", DescrType type = DescrType.Text)
+    public Descriptor_Number(string name = "Descriptor Name", DescrType type = DescrType.Number)
         : base(name, DescrType.Number)
     {
         Precision = 0;
@@ -221,6 +283,12 @@ public class Descriptor_Number : Descriptor
         {
             nums[i] = defaultNums[i];
         }
+    }
+    // Copy Constructor
+    public Descriptor_Number(Descriptor_Number descr) : base(descr)
+    {
+        Array.Copy(descr.nums, nums, descr.nums.Length);
+        Precision = descr.Precision;
     }
 
     // Get and Set nums using strings
@@ -298,6 +366,17 @@ public class Descriptor_Number : Descriptor
             nums[(int)NumIndex.Value] -= nums[(int)NumIndex.Increment];
             Clamp(ref nums[(int)NumIndex.Value]);
         }
+    }
+}
+public class Descriptor_Tags : Descriptor
+{
+
+    public Descriptor_Tags(string name = "Descriptor Name", DescrType type = DescrType.Tags)
+        : base(name, DescrType.Tags) { }
+
+    public Descriptor_Tags(Descriptor_Tags descr) : base(descr)
+    {
+
     }
 }
 
