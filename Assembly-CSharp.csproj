@@ -81,6 +81,7 @@
     <Compile Include="Assets\Scripts\ThumbListMonitor.cs" />
     <Compile Include="Assets\Scripts\MiniDescrListPanel.cs" />
     <Compile Include="Assets\Scripts\DescrDetailsMonitor_TXT.cs" />
+    <Compile Include="Assets\Scripts\SubMenu.cs" />
     <Compile Include="Assets\Scripts\DescrDetailsMonitor.cs" />
     <Compile Include="Assets\Scripts\DescrPickerMonitor.cs" />
     <Compile Include="Assets\Scripts\MenuMonitor.cs" />
@@ -89,7 +90,7 @@
     <Compile Include="Assets\Scripts\MiniDescrListMonitor.cs" />
     <Compile Include="Assets\Scripts\CuttingRoom.cs" />
     <Compile Include="Assets\Scripts\MiniListPanel.cs" />
-    <Compile Include="Assets\Scripts\SubMenu.cs" />
+    <Compile Include="Assets\Scripts\DescrDetailsMonitor_CHK.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

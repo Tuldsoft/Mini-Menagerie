@@ -12,6 +12,7 @@ public enum MenuName
     Tags,
     Encounter_Builder,
     Collection_Stats,
+    Settings,
     Help,
     About,
     Quit,
@@ -156,6 +157,7 @@ static public class MenuManager
                 LaunchMenu(MenuType.Descr);
                 break;
 
+            // Probably should not be handled by the Menu Manager
             case MenuName.NewDescrText:
                 Descriptor.CreateNew(DescrType.Text); // MenuMonitor and MenuItem take it from here
                 break;
@@ -180,6 +182,7 @@ static public class MenuManager
         }
     }
 
+    // Initializes "packs" of MenuNames for different MenuTypes
     static void InitializeNames()
     {
         MainMenuNames = new Dictionary<MenuName, string>();
@@ -189,6 +192,7 @@ static public class MenuManager
         MainMenuNames.Add(MenuName.Tags, "Tags");
         MainMenuNames.Add(MenuName.Encounter_Builder, "Encounter Builder");
         MainMenuNames.Add(MenuName.Collection_Stats, "Collection Stats");
+        MainMenuNames.Add(MenuName.Settings, "Settings");
         MainMenuNames.Add(MenuName.Help, "Help");
         MainMenuNames.Add(MenuName.About, "About");
 

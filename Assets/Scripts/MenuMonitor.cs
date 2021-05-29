@@ -118,13 +118,4 @@ public class MenuMonitor : MonoBehaviour
         }
 
     }
-
-
-    public void CloseMenu()
-    {
-        MenuManager.CloseMenu(gameObject);
-        //Destroy(gameObject);
-    }
-
-
 }

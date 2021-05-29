@@ -18,7 +18,7 @@ public class MenuItem : MonoBehaviour
     public void MenuItem_Click()
     {
         MenuManager.GoToMenu(menuName);
-        monitor.CloseMenu();
+        MenuManager.CloseMenu(monitor.gameObject);
     }
 
 }

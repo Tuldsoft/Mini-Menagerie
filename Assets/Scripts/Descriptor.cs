@@ -46,11 +46,11 @@ public class DescrID
 
 public class Descriptor : IComparable<Descriptor>, IEquatable<Descriptor>
 {
-    const string defaultName = "Descriptor Name";
-    const string defaultName_TXT = "Text Name";
-    const string defaultName_CHK = "Checkbox Name";
-    const string defaultName_NUM = "Number Name";
-    const string defaultName_TAG = "Tags Name";
+    protected const string defaultName = "Descriptor Name";
+    protected const string defaultName_TXT = "Text Name";
+    protected const string defaultName_CHK = "Checkbox Name";
+    protected const string defaultName_NUM = "Number Name";
+    protected const string defaultName_TAG = "Tags Name";
 
     public Guid ID { get; private set; } 
 
@@ -68,6 +68,8 @@ public class Descriptor : IComparable<Descriptor>, IEquatable<Descriptor>
 
     static DescrCollection collection = new DescrCollection();
     static public List<Descriptor> List { get => collection.List; }
+    static public Dictionary<DescrType, Action> Constructors { get; private set; }
+
     static public IEnumerable<string> Names { 
         get
         {
@@ -140,8 +142,15 @@ public class Descriptor : IComparable<Descriptor>, IEquatable<Descriptor>
         if (initialized) return;
         
         initialized = true;
+
+        Constructors = new Dictionary<DescrType, Action>();
+        Constructors.Add(DescrType.Text, new Action(() => new Descriptor_Text()));
+        Constructors.Add(DescrType.CheckBox, new Action(() => new Descriptor_CheckBox()));
+        Constructors.Add(DescrType.Number, new Action(() => new Descriptor_Number()));
+        Constructors.Add(DescrType.Tags, new Action(() => new Descriptor_Tags()));
+
         CreateNew(DescrType.Text);
-        CreateNew(DescrType.Text);
+        CreateNew(DescrType.CheckBox);
         CreateNew(DescrType.Text);
         CreateNew(DescrType.Text);
         CreateNew(DescrType.Text);
@@ -156,27 +165,29 @@ public class Descriptor : IComparable<Descriptor>, IEquatable<Descriptor>
 
     static public void CreateNew(DescrType type)
     {
-        switch (type)
+        /*switch (type)
         {
             case DescrType.Text:
-                new Descriptor_Text(defaultName_TXT, type);
+                new Descriptor_Text(defaultName_TXT);
                 break;
             case DescrType.CheckBox:
-                new Descriptor_CheckBox(defaultName_CHK, type);
+                new Descriptor_CheckBox(defaultName_CHK);
                 break;
             case DescrType.Number:
-                new Descriptor_Number(defaultName_NUM, type);
+                new Descriptor_Number(defaultName_NUM);
                 break;
             case DescrType.Tags:
-                //new Descriptor_Tags(defaultName_TAG, type);
+                //new Descriptor_Tags(defaultName_TAG);
                 break;
             default:
-                new Descriptor_Text(defaultName_TXT, type);
+                new Descriptor_Text(defaultName_TXT);
                 break;
-        }
+        }*/
+
+        Constructors[type].DynamicInvoke();
     }
 
-    // Makes use of copy constructor
+    // Makes use of copy constructor to recreate a descr from the master collection
     static public Descriptor Copy(Descriptor descr)
     {
         return collection.CopyDescr(descr);
@@ -195,7 +206,7 @@ public class Descriptor_Text : Descriptor
     public string DefaultText { get; set; } = "Default text";
     public string Text { get; set; } = "Default text";
 
-    public Descriptor_Text(string name = "Descriptor Name", DescrType type = DescrType.Text)
+    public Descriptor_Text(string name = defaultName_TXT)
         : base(name, DescrType.Text) 
     {
         Text = DefaultText;
@@ -213,7 +224,7 @@ public class Descriptor_CheckBox : Descriptor
     public bool DefaultIsChecked { get; set; } = false;
     public bool IsChecked { get; set; } = false;
 
-    public Descriptor_CheckBox(string name = "Descriptor Name", DescrType type = DescrType.CheckBox)
+    public Descriptor_CheckBox(string name = defaultName_CHK)
         : base(name, DescrType.CheckBox) { }
 
     public Descriptor_CheckBox(Descriptor_CheckBox descr) : base(descr)
@@ -273,7 +284,7 @@ public class Descriptor_Number : Descriptor
 
 
     // Constructor
-    public Descriptor_Number(string name = "Descriptor Name", DescrType type = DescrType.Number)
+    public Descriptor_Number(string name = defaultName_NUM)
         : base(name, DescrType.Number)
     {
         Precision = 0;
@@ -371,7 +382,7 @@ public class Descriptor_Number : Descriptor
 public class Descriptor_Tags : Descriptor
 {
 
-    public Descriptor_Tags(string name = "Descriptor Name", DescrType type = DescrType.Tags)
+    public Descriptor_Tags(string name = defaultName_TAG)
         : base(name, DescrType.Tags) { }
 
     public Descriptor_Tags(Descriptor_Tags descr) : base(descr)

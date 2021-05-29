@@ -22,7 +22,7 @@ public class DescrDetailsMonitor : MonoBehaviour
         showToggle.isOn = descr.AlwaysShow;
     }
 
-    public void Toggle_Click()
+    public void ShowToggle_Click()
     {
         descr.AlwaysShow = showToggle.isOn;
     }
