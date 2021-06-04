@@ -23,8 +23,11 @@ public abstract class MiniDescrListPanel : ScrollListPanel<Descriptor>
         }
     }
 
-    public void Panel_Click()
+    protected bool IsNull(Descriptor descr)
     {
-        
+        bool test = (descr is null);
+        if (test)
+            Debug.Log("Descriptor is null.");
+        return test;
     }
 }

@@ -7,26 +7,27 @@ public class MiniDescrListMonitor : ScrollListMonitor<Descriptor>
     /*[SerializeField]
     GameObject prefabNewDescrPanel = null;*/
 
-    [SerializeField]
-    public DescrType defaultNewType;
+    /*[SerializeField]
+    public DescrType defaultNewType;*/
 
-    GameObject templatePanel_Text = null;
-    GameObject templatePanel_CheckBox = null;
-    GameObject templatePanel_Number = null;
-    GameObject templatePanel_Tags = null;
+    //GameObject templatePanel_Text = null;
+    //GameObject templatePanel_CheckBox = null;
+    //GameObject templatePanel_Number = null;
+    //GameObject templatePanel_Tags = null;
 
     protected override void Start()
     {
         keepFirstPanel = true; // first panel is thumbnail carousel
+        newAsLastPanel = true;
         referenceList = Mini.ActiveMini.Descriptors.List; // used to populate the list
 
         // Load panel templates
-        templatePanel_Text = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabDescrPanel_Text");
+        /*templatePanel_Text = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabDescrPanel_Text");
         templatePanel_CheckBox = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabDescrPanel_CheckBox");
         templatePanel_Number = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabDescrPanel_Number");
-        //templatePanel_Tags = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabDescrPanel_Tags");
+        //templatePanel_Tags = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabDescrPanel_Tags");*/
         
-        prefabNewPanel = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabNewDescrPanel");
+        /*prefabNewPanel = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabNewDescrPanel");
 
         if (defaultNewType == DescrType.Tags)
             prefabPanel = templatePanel_Tags;
@@ -35,29 +36,12 @@ public class MiniDescrListMonitor : ScrollListMonitor<Descriptor>
         else if (defaultNewType == DescrType.Number)
             prefabPanel = templatePanel_Number;
         else 
-            prefabPanel = templatePanel_Text;
+            prefabPanel = templatePanel_Text;*/
 
         base.Start();
 
 
     }
 
-    /*public override void PopulateGrid()
-    {
-        EmptyGrid(); // keep first panel (prefabMiniThumbnail)
-
-        GameObject newPanel;
-
-        foreach (Descriptor descriptor in Mini.ActiveMini.Descriptors)
-        {
-            newPanel = Instantiate(prefabPanel, gridContent.transform);
-            ScrollListPanel descrPanel = newPanel.GetComponent<ScrollListPanel>();
-
-            descrPanel.SetPanel(descriptor, this);
-        }
-
-        newPanel = Instantiate(prefabNewDescrPanel, gridContent.transform);
-        ScrollListPanel listPanel = newPanel.GetComponent<ScrollListPanel>();
-        listPanel.SetPanel(null, this);
-    }*/
+    
 }

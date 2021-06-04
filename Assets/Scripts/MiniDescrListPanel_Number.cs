@@ -10,41 +10,42 @@ public class MiniDescrListPanel_Number : MiniDescrListPanel
 
     InputField valueInput = null;
 
+    Descriptor_Number descr_NUM;
+
     public override void SetPanel(object obj, ScrollListMonitor<Descriptor> monitor)
     {
         base.SetPanel(obj, monitor);
 
-        if (descriptor is Descriptor_Number dn)
-        {
-            valueInput = valueText.GetComponent<InputField>();
-            Utils.SetInputFieldColors(valueInput);
-            valueInput.text = dn.Value;
-        }
+        descr_NUM = descriptor as Descriptor_Number;
+
+        if (IsNull(descr_NUM)) return;
+
+        valueInput = valueText.GetComponent<InputField>();
+        Utils.SetInputFieldColors(valueInput);
+        valueInput.text = descr_NUM.Value;
     }
 
     public void InputText_Edit(string text)
     {
-        if (descriptor is Descriptor_Number dn)
-        {
-            dn.Value = text;
-        }
+        if (IsNull(descr_NUM)) return;
+
+        descr_NUM.Value = text;
+        valueInput.text = descr_NUM.Value;
     }
 
     public void IncreaseButton_Click()
     {
-        if (descriptor is Descriptor_Number dn)
-        {
-            dn.Increase();
-            valueInput.text = dn.Value;
-        }
+        if (IsNull(descr_NUM)) return;
+
+        descr_NUM.Increase();
+        valueInput.text = descr_NUM.Value;
     }
 
     public void DecreaseButton_Click()
     {
-        if (descriptor is Descriptor_Number dn)
-        {
-            dn.Decrease();
-            valueInput.text = dn.Value;
-        }
+        if (IsNull(descr_NUM)) return;
+    
+        descr_NUM.Decrease();
+        valueInput.text = descr_NUM.Value;
     }
 }

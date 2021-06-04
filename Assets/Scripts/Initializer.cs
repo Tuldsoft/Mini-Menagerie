@@ -11,5 +11,7 @@ static public class Initializer
         MiniCollection.Initialize();
         Descriptor.Initialize();
         MenuManager.Initialize();
+        Loader.Initialize();
+
     }
 }

@@ -50,5 +50,4 @@ static public class Utils
         inputField.transform.parent.GetComponent<Image>().color = Button_HighlightColor;
     }
 
-
 }

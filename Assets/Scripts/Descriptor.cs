@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public enum DescrType
 {
@@ -151,7 +149,7 @@ public class Descriptor : IComparable<Descriptor>, IEquatable<Descriptor>
 
         CreateNew(DescrType.Text);
         CreateNew(DescrType.CheckBox);
-        CreateNew(DescrType.Text);
+        CreateNew(DescrType.Number);
         CreateNew(DescrType.Text);
         CreateNew(DescrType.Text);
 
@@ -165,24 +163,6 @@ public class Descriptor : IComparable<Descriptor>, IEquatable<Descriptor>
 
     static public void CreateNew(DescrType type)
     {
-        /*switch (type)
-        {
-            case DescrType.Text:
-                new Descriptor_Text(defaultName_TXT);
-                break;
-            case DescrType.CheckBox:
-                new Descriptor_CheckBox(defaultName_CHK);
-                break;
-            case DescrType.Number:
-                new Descriptor_Number(defaultName_NUM);
-                break;
-            case DescrType.Tags:
-                //new Descriptor_Tags(defaultName_TAG);
-                break;
-            default:
-                new Descriptor_Text(defaultName_TXT);
-                break;
-        }*/
 
         Constructors[type].DynamicInvoke();
     }
@@ -209,11 +189,13 @@ public class Descriptor_Text : Descriptor
     public Descriptor_Text(string name = defaultName_TXT)
         : base(name, DescrType.Text) 
     {
+        // a new Descriptor_Text's Text begins as DefaultText
         Text = DefaultText;
     }
 
     public Descriptor_Text(Descriptor_Text descr) : base(descr)
     {
+        // a new Descriptor_Text's Text begins as DefaultText
         this.DefaultText = descr.DefaultText;
         this.Text = descr.DefaultText;
     }
@@ -229,8 +211,9 @@ public class Descriptor_CheckBox : Descriptor
 
     public Descriptor_CheckBox(Descriptor_CheckBox descr) : base(descr)
     {
+        // a new Descriptor_CheckBox's IsChecked starts as DefaultIsChecked
         this.DefaultIsChecked = descr.DefaultIsChecked;
-        this.IsChecked = descr.IsChecked;
+        this.IsChecked = descr.DefaultIsChecked;
     }
 }
 
@@ -271,6 +254,7 @@ public class Descriptor_Number : Descriptor
         set => SetNum(NumIndex.Increment, value);
     }
 
+    // Number of places after the decimal point
     private int _precision = 0;
     // Number of places after the decimal point
     public int Precision
@@ -279,7 +263,7 @@ public class Descriptor_Number : Descriptor
         set => _precision = Math.Max(Math.Min(value, MaxPrecision), 0); // clamp 0 to 5
     }
     const int MaxPrecision = 5;
-    private string precisionString { get => String.Format("N{0}", Precision); }
+    private string precisionFormat { get => String.Format("N{0}", Precision); }
 
 
 
@@ -289,7 +273,7 @@ public class Descriptor_Number : Descriptor
     {
         Precision = 0;
         nums = new decimal?[Enum.GetNames(typeof(NumIndex)).Length];
-        // EDIT: add try statement for safety, in case array sizes don't line up
+        // TODO: add try statement for safety, in case array sizes don't line up
         for (int i = 0; i < nums.Length; i++)
         {
             nums[i] = defaultNums[i];
@@ -298,11 +282,20 @@ public class Descriptor_Number : Descriptor
     // Copy Constructor
     public Descriptor_Number(Descriptor_Number descr) : base(descr)
     {
-        Array.Copy(descr.nums, nums, descr.nums.Length);
+        //Array.Copy(descr.nums, nums, descr.nums.Length); // Array.Copy() does not work with Nullable types
+        nums = new decimal?[Enum.GetNames(typeof(NumIndex)).Length];
+        for (int i = 1; i < nums.Length; i++)
+            nums[i] = descr.nums[i];
+
+        // a new Descriptor_Number starts with a Value of Default
+        nums[(int)NumIndex.Value] = descr.nums[(int)NumIndex.Default];
+
         Precision = descr.Precision;
     }
 
-    // Get and Set nums using strings
+
+
+    // Get a string from a decimal? value in the nums[] array
     string GetNum(NumIndex numIndex)
     {
         decimal? result = nums[(int)numIndex];
@@ -310,9 +303,10 @@ public class Descriptor_Number : Descriptor
         if (result == null) 
             return String.Empty;
 
-        return ((decimal)result).ToString(precisionString);
+        return ((decimal)result).ToString(precisionFormat);
     }
 
+    // Parse a string, clamp the value, and store it in nums[]
     void SetNum(NumIndex numIndex, string s)
     {
         if (String.IsNullOrEmpty(s) || String.IsNullOrWhiteSpace(s))
@@ -325,11 +319,29 @@ public class Descriptor_Number : Descriptor
             if (newValue == null)
                 return;                             // do not change the value for a bad string
 
+            // No Min greater than Max, or vice versa
+            if (numIndex == NumIndex.Max &&
+                newValue < nums[(int)NumIndex.Min])
+                newValue = nums[(int)NumIndex.Min];
+            if (numIndex == NumIndex.Min &&
+                newValue > nums[(int)NumIndex.Max])
+                newValue = nums[(int)NumIndex.Max];
+
+            // Clamp a new Value or Default to existing Min and Max
             if (numIndex == NumIndex.Value ||
-                numIndex == NumIndex.Default)
+                numIndex == NumIndex.Default )
                 Clamp(ref newValue);
-            
+
             nums[(int)numIndex] = newValue;
+
+            // If Default or Value is outside a new Min or Max, Clamp it.
+            if (numIndex == NumIndex.Min ||
+                numIndex == NumIndex.Max)
+            {
+                Clamp(ref nums[(int)NumIndex.Value]);
+                Clamp(ref nums[(int)NumIndex.Default]);
+            }
+                
         }
     }
     
@@ -347,7 +359,7 @@ public class Descriptor_Number : Descriptor
         }
     }
 
-    // Clamp a decimal? value
+    // Clamp a decimal? value to Min and Max
     void Clamp(ref decimal? num)
     {
         decimal? min = nums[(int)NumIndex.Min];
@@ -362,7 +374,11 @@ public class Descriptor_Number : Descriptor
     {
         if (nums[(int)NumIndex.Increment] != null)
         {
-            nums[(int)NumIndex.Value] ??= 0;
+            // Unity does not recognize ??= operator...
+            // nums[(int)NumIndex.Value] ??= 0;
+            
+            if (nums[(int)NumIndex.Value] is null)
+                nums[(int)NumIndex.Value] = 0;
             nums[(int)NumIndex.Value] += nums[(int)NumIndex.Increment];
             Clamp(ref nums[(int)NumIndex.Value]);
         }
@@ -373,12 +389,14 @@ public class Descriptor_Number : Descriptor
     {
         if (nums[(int)NumIndex.Increment] != null)
         {
-            nums[(int)NumIndex.Value] ??= 0;
+            if (nums[(int)NumIndex.Value] is null)
+                nums[(int)NumIndex.Value] = 0;
             nums[(int)NumIndex.Value] -= nums[(int)NumIndex.Increment];
             Clamp(ref nums[(int)NumIndex.Value]);
         }
     }
 }
+
 public class Descriptor_Tags : Descriptor
 {
 

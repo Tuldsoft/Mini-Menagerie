@@ -30,7 +30,8 @@ public class DescrSceneMonitor : MonoBehaviour
     IEnumerator WaitForClose()
     {
         yield return new WaitWhile(MenuManager.MenuOpen);
-        listMonitor.AddToGrid(Descriptor.List.Last());
+        Descriptor descr = Descriptor.List.Last();
+        listMonitor.AddToGrid(descr, Loader.GetPanel<Descriptor>(listMonitor, descr));
         //listMonitor.PopulateGrid(); // replace with add to grid
         yield return null;
     }

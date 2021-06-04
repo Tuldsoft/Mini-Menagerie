@@ -15,7 +15,7 @@ public class ThumbListMonitor : ScrollListMonitor<Mini>
     protected override void Start()
     {
         // Load a shop panel template
-        prefabPanel = Resources.Load<GameObject>(@"Prefabs\prefabMiniThumbnail");
+        //prefabPanel = Resources.Load<GameObject>(@"Prefabs\prefabMiniThumbnail");
 
         keepFirstPanel = false;
 
@@ -32,7 +32,7 @@ public class ThumbListMonitor : ScrollListMonitor<Mini>
 
         foreach (Sprite sprite in Mini.ActiveMini.Photos)
         {
-            newPanel = Instantiate(prefabPanel, gridContent.transform);
+            newPanel = Instantiate(Loader.GetPanel(this), gridContent.transform);
             ScrollListPanel<Mini> thumbPanel = newPanel.GetComponent<ScrollListPanel<Mini>>();
 
             thumbPanel.SetPanel(sprite, this);

@@ -10,7 +10,7 @@ public class DescrPickerMonitor : ScrollListMonitor<Descriptor>
     protected override void Start()
     {
         // Load panel template
-        prefabPanel = Resources.Load<GameObject>(@"Prefabs\DescrScene\prefabDescrPanel");
+        //prefabPanel = Resources.Load<GameObject>(@"Prefabs\DescrScene\prefabDescrPanel");
 
         keepFirstPanel = false;
 

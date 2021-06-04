@@ -11,12 +11,13 @@ public abstract class ScrollListMonitor<T> : MonoBehaviour where T : IComparable
     [SerializeField]
     protected GameObject gridContent = null;     // set in Inspector
 
-    protected GameObject prefabPanel = null;     // set by Start() in children
-    protected GameObject prefabNewPanel = null;  // set by Start() in children, if used
+    //protected GameObject prefabPanel = null;     // set by Start() in children
+    //protected GameObject prefabNewPanel = null;  // set by Start() in children, if used
 
     protected IEnumerable<T> referenceList;             // set by Start() in children
 
     protected bool keepFirstPanel = false;       // set by Start() in children
+    protected bool newAsLastPanel = false;       // set by Start() in children
 
     #endregion
 
@@ -27,8 +28,7 @@ public abstract class ScrollListMonitor<T> : MonoBehaviour where T : IComparable
         PopulateGrid(false); // scroll to top at start
     }
 
-
-
+        
     // Fills the ScrollList with ScrollListPanels
     // Overridde in case T is not IComparable (ex. a Sprite)
     // T is generally a Mini, a Descriptor, or a Tag (IComparables)
@@ -40,13 +40,22 @@ public abstract class ScrollListMonitor<T> : MonoBehaviour where T : IComparable
 
         foreach (T listItem in referenceList)
         {
+            AddToGrid(listItem, Loader.GetPanel<T>(this, listItem));
+        }
+        if (newAsLastPanel)
+        {
+            AddToGrid(default, Loader.GetPanel<T>(this, default));
+        }
+
+        /*foreach (T listItem in referenceList)
+        {
             AddToGrid(listItem, prefabPanel);
         }
 
         if (prefabNewPanel != null)
         {
             AddToGrid(default, prefabNewPanel);
-        }
+        }*/
 
     }
 
@@ -58,9 +67,14 @@ public abstract class ScrollListMonitor<T> : MonoBehaviour where T : IComparable
         StartCoroutine(ScrollToEnd(scrollToEnd));
     }
 
-    public virtual void AddToGrid(T listItem, GameObject prefab = null)
+    // listItem is null (default) if creating a "new" panel
+    public virtual void AddToGrid(T listItem, GameObject prefab)
     {
-        prefab ??= prefabPanel;
+        if (prefab is null)
+        {
+            Debug.Log("Attempting to create a panel from null");
+            return;
+        }
         
         GameObject newPanel;
 

@@ -35,12 +35,6 @@ public class MiniSceneMonitor : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void BackButton_Click()
     {
         MenuManager.GoToMenu(MenuName.Browse);
