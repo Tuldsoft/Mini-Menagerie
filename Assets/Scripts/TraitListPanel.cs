@@ -3,33 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DescrListPanel : ScrollListPanel<Descriptor>
+public class TraitListPanel : ScrollListPanel<Trait>
 {
     [SerializeField]
     protected Text nameText;
     [SerializeField]
     protected Image typeImage, radiantImage, defaultImage, trashbutton;
 
-    protected Descriptor descriptor = null;
+    protected Trait trait = null;
     bool isPickerPanel = false;
 
-    public override void SetPanel(object obj, ScrollListMonitor<Descriptor> monitor)
+    public override void SetPanel(object obj, ScrollListMonitor<Trait> monitor)
     {
         base.SetPanel(obj, monitor); // registers monitor
 
         // setup UI elements
-        if (obj is Descriptor d)
+        if (obj is Trait tr)
         {
-            descriptor = d;
-            nameText.text = d.Name;
-            typeImage.sprite = ImageUtils.DescrTypeSprites[d.Type];
-            radiantImage.enabled = d.AlwaysShow;
+            trait = tr;
+            nameText.text = tr.Name;
+            typeImage.sprite = ImageUtils.TraitTypeSprites[tr.Type];
+            radiantImage.enabled = tr.IncludeAll;
             //default image is included in the prefab
             //trashbutton image is included in the prefab
 
-            if (monitor is DescrPickerMonitor)
+            if (monitor is TraitPickerMonitor)
                 SetAsPickerPanel();
-
         }
     }
 
@@ -53,7 +52,7 @@ public class DescrListPanel : ScrollListPanel<Descriptor>
     {
         if (isPickerPanel)
         {
-            Mini.ActiveMini.AddDescriptor(Descriptor.Copy(descriptor));
+            Mini.ActiveMini.AddTrait(Trait.Copy(trait));
 
             //monitor.PopulateGrid(true); // scroll to end
 
@@ -62,8 +61,8 @@ public class DescrListPanel : ScrollListPanel<Descriptor>
         }
         else
         {
-            Descriptor.SetActive(descriptor);
-            MenuManager.GoToMenu(MenuName.DescrDetails);
+            Trait.SetActive(trait);
+            MenuManager.GoToMenu(MenuName.TraitDetails);
 
             StartCoroutine(WaitForClose());
         }

@@ -9,15 +9,15 @@ public abstract class ScrollListMonitor<T> : MonoBehaviour where T : IComparable
     #region Fields
 
     [SerializeField]
-    protected GameObject gridContent = null;     // set in Inspector
+    protected GameObject gridContent = null;       // set in Inspector
 
-    //protected GameObject prefabPanel = null;     // set by Start() in children
-    //protected GameObject prefabNewPanel = null;  // set by Start() in children, if used
+    //protected GameObject prefabPanel = null;     // now managed by Loader
+    //protected GameObject prefabNewPanel = null;  // now managed by Loader
 
-    protected IEnumerable<T> referenceList;             // set by Start() in children
+    protected IEnumerable<T> referenceList;        // set by Start() in children
 
-    protected bool keepFirstPanel = false;       // set by Start() in children
-    protected bool newAsLastPanel = false;       // set by Start() in children
+    protected bool keepFirstPanel = false;         // set by Start() in children
+    protected bool newAsLastPanel = false;         // set by Start() in children
 
     #endregion
 
@@ -31,7 +31,7 @@ public abstract class ScrollListMonitor<T> : MonoBehaviour where T : IComparable
         
     // Fills the ScrollList with ScrollListPanels
     // Overridde in case T is not IComparable (ex. a Sprite)
-    // T is generally a Mini, a Descriptor, or a Tag (IComparables)
+    // T is generally a Mini, a Trait, or a Tag (IComparables)
     public virtual void PopulateGrid()
     {
         EmptyGrid();
@@ -46,17 +46,6 @@ public abstract class ScrollListMonitor<T> : MonoBehaviour where T : IComparable
         {
             AddToGrid(default, Loader.GetPanel<T>(this, default));
         }
-
-        /*foreach (T listItem in referenceList)
-        {
-            AddToGrid(listItem, prefabPanel);
-        }
-
-        if (prefabNewPanel != null)
-        {
-            AddToGrid(default, prefabNewPanel);
-        }*/
-
     }
 
     // overload to scroll to end

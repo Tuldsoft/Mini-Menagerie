@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class DescrPickerMonitor : ScrollListMonitor<Descriptor>
+public class TraitPickerMonitor : ScrollListMonitor<Trait>
 {
     
     // Start is called before the first frame update
@@ -15,10 +15,10 @@ public class DescrPickerMonitor : ScrollListMonitor<Descriptor>
         keepFirstPanel = false;
 
         // only load picker with Descriptors that are not already in this Mini's List
-        IEnumerable<Descriptor> partialList =
-            from descr in Descriptor.List
-            where !Mini.ActiveMini.Descriptors.List.Contains(descr)
-            select descr;
+        IEnumerable<Trait> partialList =
+            from trait in Trait.List
+            where !Mini.ActiveMini.Traits.List.Contains(trait)
+            select trait;
 
         referenceList = partialList;
 

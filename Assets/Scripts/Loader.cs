@@ -16,16 +16,16 @@ static public class Loader
     static public GameObject ThumbPanel { get; private set; }
 
     // MiniDescrListPanels
-    static public Dictionary<DescrType, GameObject> MiniDescrPanels { get; private set; }
-    static GameObject miniDescrPanel_TXT = null;
-    static GameObject miniDescrPanel_CHK = null;
-    static GameObject miniDescrPanel_NUM = null;
-    static GameObject miniDescrPanel_TAG = null;
+    static public Dictionary<TraitType, GameObject> MiniTraitPanels { get; private set; }
+    static GameObject miniTraitPanel_TXT = null;
+    static GameObject miniTraitPanel_CHK = null;
+    static GameObject miniTraitPanel_NUM = null;
+    static GameObject miniTraitPanel_TAG = null;
 
-    static public GameObject MiniDescrPanel_New { get; private set; }
+    static public GameObject MiniTraitPanel_New { get; private set; }
 
-    // DescrPanel (also used in DescrPicker)
-    static public GameObject DescrPanel { get; private set; }
+    // DescrPanel (also used in TraitPicker)
+    static public GameObject TraitPanel { get; private set; }
 
     
 
@@ -44,21 +44,21 @@ static public class Loader
         ThumbPanel = Resources.Load<GameObject>(@"Prefabs\prefabMiniThumbnail"); 
         
         // Mini Descr Panels
-        miniDescrPanel_TXT = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabDescrPanel_Text");
-        miniDescrPanel_CHK = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabDescrPanel_CheckBox");
-        miniDescrPanel_NUM = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabDescrPanel_Number");
-        //miniDescrPanel_TAG = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabDescrPanel_Tags");
+        miniTraitPanel_TXT = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabTraitPanel_TXT");
+        miniTraitPanel_CHK = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabTraitPanel_CHK");
+        miniTraitPanel_NUM = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabTraitPanel_NUM");
+        //miniTraitPanel_TAG = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabTraitPanel_TAG");
 
-        MiniDescrPanels = new Dictionary<DescrType, GameObject>();
-        MiniDescrPanels.Add(DescrType.Text, miniDescrPanel_TXT);
-        MiniDescrPanels.Add(DescrType.CheckBox, miniDescrPanel_CHK);
-        MiniDescrPanels.Add(DescrType.Number, miniDescrPanel_NUM);
-        MiniDescrPanels.Add(DescrType.Tags, miniDescrPanel_TAG);
+        MiniTraitPanels = new Dictionary<TraitType, GameObject>();
+        MiniTraitPanels.Add(TraitType.TXT, miniTraitPanel_TXT);
+        MiniTraitPanels.Add(TraitType.CHK, miniTraitPanel_CHK);
+        MiniTraitPanels.Add(TraitType.NUM, miniTraitPanel_NUM);
+        MiniTraitPanels.Add(TraitType.TAG, miniTraitPanel_TAG);
 
-        MiniDescrPanel_New = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabNewDescrPanel");
+        MiniTraitPanel_New = Resources.Load<GameObject>(@"Prefabs\MiniScene\prefabNewTraitPanel");
 
-        // Descr Panel (Descr scene and Descr Picker)
-        DescrPanel = Resources.Load<GameObject>(@"Prefabs\DescrScene\prefabDescrPanel");
+        // Trait Panel (Trait scene and Trait Picker)
+        TraitPanel = Resources.Load<GameObject>(@"Prefabs\TraitScene\prefabTraitPanel");
 
     }
 
@@ -66,15 +66,15 @@ static public class Loader
     // listItem is null (default) when a "new" panel is created
     static public GameObject GetPanel<T>(ScrollListMonitor<T> monitor, T listItem) where T : IComparable<T>
     {
-        if (monitor is MiniDescrListMonitor)
+        if (monitor is MiniTraitListMonitor)
         {
-            Descriptor descr = listItem as Descriptor;
-            return (descr is null ? MiniDescrPanel_New : MiniDescrPanels[descr.Type]);
+            Trait trait = listItem as Trait;
+            return (trait is null ? MiniTraitPanel_New : MiniTraitPanels[trait.Type]);
         }
 
-        if (monitor is DescrListMonitor
-            || monitor is DescrPickerMonitor)
-            return DescrPanel;
+        if (monitor is TraitListMonitor
+            || monitor is TraitPickerMonitor)
+            return TraitPanel;
 
         // unused, see overload below
         if (monitor is ThumbListMonitor)

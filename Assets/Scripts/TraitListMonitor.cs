@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DescrListMonitor : ScrollListMonitor<Descriptor>
+public class TraitListMonitor : ScrollListMonitor<Trait>
 {
 
     protected override void Start()
@@ -12,7 +12,7 @@ public class DescrListMonitor : ScrollListMonitor<Descriptor>
         
 
         keepFirstPanel = false;
-        referenceList = Descriptor.List;
+        referenceList = Trait.List;
 
         base.Start();
     }

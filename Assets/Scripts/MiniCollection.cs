@@ -23,4 +23,11 @@ static public class MiniCollection
         Minis.Add(new Mini(name));
     }
 
+    static public void AddTraitToAllMinis(Trait trait)
+    {
+        foreach (Mini mini in Minis)
+        {
+            mini.AddTrait(Trait.Copy(trait));
+        }
+    }
 }

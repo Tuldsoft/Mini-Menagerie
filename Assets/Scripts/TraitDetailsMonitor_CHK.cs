@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DescrDetailsMonitor_CHK : DescrDetailsMonitor
+public class TraitDetailsMonitor_CHK : TraitDetailsMonitor
 {
     [SerializeField]
     Toggle defaultToggle = null;
 
-    Descriptor_CheckBox descrCHK;
+    Trait_CHK traitCHK;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
-        descrCHK = (descr as Descriptor_CheckBox);
-        defaultToggle.isOn = descrCHK.DefaultIsChecked;
+        traitCHK = (trait as Trait_CHK);
+        defaultToggle.isOn = traitCHK.DefaultIsChecked;
     }
 
     public void Default_Click()
     {
-        descrCHK.DefaultIsChecked = defaultToggle.isOn;
+        traitCHK.DefaultIsChecked = defaultToggle.isOn;
 
     }
 }

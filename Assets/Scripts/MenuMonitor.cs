@@ -61,8 +61,8 @@ public class MenuMonitor : MonoBehaviour
             case MenuType.Main:
                 dict = MenuManager.MainMenuNames;
                 break;
-            case MenuType.Descr:
-                dict = MenuManager.NewDescrNames;
+            case MenuType.Trait:
+                dict = MenuManager.NewTraitNames;
                 anchorLeft = false;
                 break;
             default:

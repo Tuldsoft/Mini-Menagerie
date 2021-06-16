@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DescrDetailsMonitor_NUM : DescrDetailsMonitor
+public class TraitDetailsMonitor_NUM : TraitDetailsMonitor
 {
     [SerializeField]
     Text defaultText = null, precisionText = null, minText = null, maxText = null, incrementText = null;
 
     InputField defaultIF, minIF, maxIF, incrementIF;
 
-    Descriptor_Number descrNUM;
+    Trait_NUM traitNUM;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
-        descrNUM = (descr as Descriptor_Number);
+        traitNUM = (trait as Trait_NUM);
         
         defaultIF = defaultText.GetComponent<InputField>();
         minIF = minText.GetComponent<InputField>();
@@ -28,47 +28,47 @@ public class DescrDetailsMonitor_NUM : DescrDetailsMonitor
 
     public void Default_Enter(string value)
     {
-        descrNUM.Default = value;
+        traitNUM.Default = value;
         RefreshFields();
     }
 
     public void Min_Enter(string value)
     {
-        descrNUM.Min = value;
+        traitNUM.Min = value;
         RefreshFields();
     }
 
     public void Max_Enter(string value)
     {
-        descrNUM.Max = value;
+        traitNUM.Max = value;
         RefreshFields();
     }
 
     public void Increment_Enter(string value)
     {
-        descrNUM.Increment = value;
+        traitNUM.Increment = value;
         RefreshFields();
     }
 
     public void Precision_Increase()
     {
-        descrNUM.Precision++;
+        traitNUM.Precision++;
         RefreshFields();
     }
 
     public void Precision_Decrease()
     {
-        descrNUM.Precision--;
+        traitNUM.Precision--;
         RefreshFields();
     }
 
     void RefreshFields()
     {
-        defaultIF.text = descrNUM.Default ?? "None";
-        minIF.text = descrNUM.Min ?? "None";
-        maxIF.text = descrNUM.Max ?? "None";
-        incrementIF.text = descrNUM.Increment ?? "1";
-        precisionText.text = descrNUM.Precision.ToString();
+        defaultIF.text = traitNUM.Default ?? "None";
+        minIF.text = traitNUM.Min ?? "None";
+        maxIF.text = traitNUM.Max ?? "None";
+        incrementIF.text = traitNUM.Increment ?? "1";
+        precisionText.text = traitNUM.Precision.ToString();
     }
 
 }

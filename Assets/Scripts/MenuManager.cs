@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,7 +10,7 @@ public enum MenuName
 {
     Menu,
     Browse,
-    Descriptors,
+    Traits,
     Tags,
     Encounter_Builder,
     Collection_Stats,
@@ -17,18 +19,18 @@ public enum MenuName
     About,
     Quit,
     View_Mini,
-    DescrPicker,
-    NewDescr,
-    NewDescrText,
-    NewDescrCheckBox,
-    NewDescrNumber,
-    NewDescrTags,
-    DescrDetails
+    TraitPicker,
+    NewTrait,
+    NewTraitTXT,
+    NewTraitCHK,
+    NewTraitNUM,
+    NewTraitTAG,
+    TraitDetails
 }
 public enum MenuType
 {
     Main,
-    Descr
+    Trait
 }
 
 static public class MenuManager
@@ -37,32 +39,33 @@ static public class MenuManager
     static bool initialized = false;
 
     static public Dictionary<MenuName, string> MainMenuNames { get; private set; } 
-    static public Dictionary<MenuName, string> NewDescrNames { get; private set; }
+    static public Dictionary<MenuName, string> NewTraitNames { get; private set; }
 
     static GameObject prefabMenu = null;
-    static GameObject prefabDescrPicker = null;
-    static GameObject prefabDescrDetails_TXT = null;
-    static GameObject prefabDescrDetails_CHK = null;
-    static GameObject prefabDescrDetails_NUM = null;
-    static GameObject prefabDescrDetails_TAG = null;
+    static GameObject prefabDialog = null;
+    static GameObject prefabTraitPicker = null;
+    static GameObject prefabTraitDetails_TXT = null;
+    static GameObject prefabTraitDetails_CHK = null;
+    static GameObject prefabTraitDetails_NUM = null;
+    static GameObject prefabTraitDetails_TAG = null;
 
 
-    static GameObject PrefabDescrDetails
+    static GameObject PrefabTraitDetails
     {
         get
         {
-            switch (Descriptor.ActiveDescr.Type)
+            switch (Trait.ActiveTrait.Type)
             {
-                case DescrType.Text:
-                    return prefabDescrDetails_TXT;
-                case DescrType.CheckBox:
-                    return prefabDescrDetails_CHK;
-                case DescrType.Number:
-                    return prefabDescrDetails_NUM;
-                case DescrType.Tags:
-                    return prefabDescrDetails_TAG;
+                case TraitType.TXT:
+                    return prefabTraitDetails_TXT;
+                case TraitType.CHK:
+                    return prefabTraitDetails_CHK;
+                case TraitType.NUM:
+                    return prefabTraitDetails_NUM;
+                case TraitType.TAG:
+                    return prefabTraitDetails_TAG;
                 default:
-                    return prefabDescrDetails_TXT;
+                    return prefabTraitDetails_TXT;
             }
         }
     }
@@ -86,11 +89,12 @@ static public class MenuManager
     static void LoadPrefabs()
     {
         prefabMenu = Resources.Load<GameObject>(@"Prefabs\Menus\prefabMenu");
-        prefabDescrPicker = Resources.Load<GameObject>(@"Prefabs\Menus\prefabDescrPicker");
-        prefabDescrDetails_TXT = Resources.Load<GameObject>(@"Prefabs\DescrScene\prefabDescrDetails_TXT");
-        prefabDescrDetails_CHK = Resources.Load<GameObject>(@"Prefabs\DescrScene\prefabDescrDetails_CHK");
-        prefabDescrDetails_NUM = Resources.Load<GameObject>(@"Prefabs\DescrScene\prefabDescrDetails_NUM");
-        prefabDescrDetails_TAG = Resources.Load<GameObject>(@"Prefabs\DescrScene\prefabDescrDetails_TAG");
+        prefabDialog = Resources.Load<GameObject>(@"Prefabs\Menus\prefabDialog");
+        prefabTraitPicker = Resources.Load<GameObject>(@"Prefabs\Menus\prefabTraitPicker");
+        prefabTraitDetails_TXT = Resources.Load<GameObject>(@"Prefabs\TraitScene\prefabTraitDetails_TXT");
+        prefabTraitDetails_CHK = Resources.Load<GameObject>(@"Prefabs\TraitScene\prefabTraitDetails_CHK");
+        prefabTraitDetails_NUM = Resources.Load<GameObject>(@"Prefabs\TraitScene\prefabTraitDetails_NUM");
+        prefabTraitDetails_TAG = Resources.Load<GameObject>(@"Prefabs\TraitScene\prefabTraitDetails_TAG");
     }
     
     // Switchboard for most menu transitions, either through moving to a new scene
@@ -110,12 +114,12 @@ static public class MenuManager
                 SceneManager.LoadScene("BrowseScene");
                 break;
 
-            case MenuName.Descriptors:
-                SceneManager.LoadScene("DescriptorsScene");
+            case MenuName.Traits:
+                SceneManager.LoadScene("TraitsScene");
                 break;
 
             case MenuName.Tags:
-                //SceneManager.LoadScene("DescriptorsScene");
+                //SceneManager.LoadScene("TagsScene");
                 break;
 
             case MenuName.Encounter_Builder:
@@ -146,34 +150,34 @@ static public class MenuManager
                 break;
 
             // Called from MiniScene
-            case MenuName.DescrPicker:
+            case MenuName.TraitPicker:
                 menuOpen = true;
-                GameObject.Instantiate(prefabDescrPicker);
+                GameObject.Instantiate(prefabTraitPicker);
                 break;
 
 
-            // Called from DescrScene
-            case MenuName.NewDescr:
-                LaunchMenu(MenuType.Descr);
+            // Called from TraitScene
+            case MenuName.NewTrait:
+                LaunchMenu(MenuType.Trait);
                 break;
 
             // Probably should not be handled by the Menu Manager
-            case MenuName.NewDescrText:
-                Descriptor.CreateNew(DescrType.Text); // MenuMonitor and MenuItem take it from here
+            case MenuName.NewTraitTXT:
+                Trait.CreateNew(TraitType.TXT); // MenuMonitor and MenuItem take it from here
                 break;
-            case MenuName.NewDescrCheckBox:
-                Descriptor.CreateNew(DescrType.CheckBox);
+            case MenuName.NewTraitCHK:
+                Trait.CreateNew(TraitType.CHK);
                 break;
-            case MenuName.NewDescrNumber:
-                Descriptor.CreateNew(DescrType.Number);
+            case MenuName.NewTraitNUM:
+                Trait.CreateNew(TraitType.NUM);
                 break;
-            case MenuName.NewDescrTags:
-                Descriptor.CreateNew(DescrType.Tags);
+            case MenuName.NewTraitTAG:
+                Trait.CreateNew(TraitType.TAG);
                 break;
 
-            case MenuName.DescrDetails:
+            case MenuName.TraitDetails:
                 menuOpen = true;
-                GameObject.Instantiate(PrefabDescrDetails);
+                GameObject.Instantiate(PrefabTraitDetails);
                 break;
 
             default:
@@ -188,7 +192,7 @@ static public class MenuManager
         MainMenuNames = new Dictionary<MenuName, string>();
         
         MainMenuNames.Add(MenuName.Browse, "Browse");
-        MainMenuNames.Add(MenuName.Descriptors, "Descriptors");
+        MainMenuNames.Add(MenuName.Traits, "Traits");
         MainMenuNames.Add(MenuName.Tags, "Tags");
         MainMenuNames.Add(MenuName.Encounter_Builder, "Encounter Builder");
         MainMenuNames.Add(MenuName.Collection_Stats, "Collection Stats");
@@ -196,12 +200,12 @@ static public class MenuManager
         MainMenuNames.Add(MenuName.Help, "Help");
         MainMenuNames.Add(MenuName.About, "About");
 
-        NewDescrNames = new Dictionary<MenuName, string>();
+        NewTraitNames = new Dictionary<MenuName, string>();
 
-        NewDescrNames.Add(MenuName.NewDescrText, "Text");
-        NewDescrNames.Add(MenuName.NewDescrCheckBox, "Check Box");
-        NewDescrNames.Add(MenuName.NewDescrNumber, "Number");
-        NewDescrNames.Add(MenuName.NewDescrTags, "Tags");
+        NewTraitNames.Add(MenuName.NewTraitTXT, "Text");
+        NewTraitNames.Add(MenuName.NewTraitCHK, "Check Box");
+        NewTraitNames.Add(MenuName.NewTraitNUM, "Number");
+        NewTraitNames.Add(MenuName.NewTraitTAG, "Tags");
     }
 
     static void LaunchMenu(MenuType type = MenuType.Main)
@@ -211,9 +215,26 @@ static public class MenuManager
         menu.GetComponentInChildren<MenuMonitor>().SetMenu(type);
     }
 
+    static public void LaunchDialogBox(DialogBoxType dbType, string message)
+    {
+        DialogBoxMonitor.DBType = dbType;
+        DialogBoxMonitor.Message = message;
+        menuOpen = true;
+
+        GameObject menu = GameObject.Instantiate(prefabDialog);
+        // no SetBox() required this time
+    }
+
+    /*static public async Task<DialogBoxResponse> DialogBoxQueryAsync (DialogBoxType dbType, string message)
+    {
+        GameObject db = GameObject.Instantiate(prefabDialog);
+        return await db.GetComponent<DialogBoxMonitor>().RunDBAsync(dbType, message);
+
+    }*/
+
     static public void CloseMenu(GameObject menuObj)
     {
-        Object.Destroy(menuObj);
+        UnityEngine.Object.Destroy(menuObj);
         menuOpen = false;
     }
 
@@ -221,6 +242,20 @@ static public class MenuManager
     {
         return menuOpen;
     }
+
+    static public IEnumerator WaitForClose(Action action)
+    {
+        yield return new WaitWhile(MenuManager.MenuOpen);
+        action();
+        yield return null;
+    }
+
+    // TO DO: Refactor the coroutines using TAP (Task-oriented Asyncronous Programming)
+    // in order to return a value. 
+    // Read: https://docs.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap
+
+    // This should eliminate the need to store things staticly and retrieve them, better OOP.
+    // ... or not. Still struggling with this one.
 }
 
 

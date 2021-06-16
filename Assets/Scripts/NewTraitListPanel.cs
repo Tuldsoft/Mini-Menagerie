@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewDescrListPanel : ScrollListPanel<Descriptor>
+public class NewTraitListPanel : ScrollListPanel<Trait>
 {
 
     // SetPanel() does not need overwriting
 
     public void NewButton_Click()
     {
-        MenuManager.GoToMenu(MenuName.DescrPicker);
+        MenuManager.GoToMenu(MenuName.TraitPicker);
 
         StartCoroutine(WaitForClose());
     }

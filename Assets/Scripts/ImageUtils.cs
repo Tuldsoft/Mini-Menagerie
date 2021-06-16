@@ -7,7 +7,7 @@ static public class ImageUtils
 {
     static bool initialized = false;
 
-    readonly static public Dictionary<DescrType, Sprite> DescrTypeSprites = new Dictionary<DescrType, Sprite>();
+    readonly static public Dictionary<TraitType, Sprite> TraitTypeSprites = new Dictionary<TraitType, Sprite>();
 
     static public Sprite RadialGreen { get; private set; }
 
@@ -21,10 +21,10 @@ static public void Initialize()
 
         initialized = true;
 
-        DescrTypeSprites.Add(DescrType.Text, Resources.Load<Sprite>(@"Images\TXT"));
-        DescrTypeSprites.Add(DescrType.CheckBox, Resources.Load<Sprite>(@"Images\CHK"));
-        DescrTypeSprites.Add(DescrType.Number, Resources.Load<Sprite>(@"Images\NUM"));
-        DescrTypeSprites.Add(DescrType.Tags, Resources.Load<Sprite>(@"Images\TAG"));
+        TraitTypeSprites.Add(TraitType.TXT, Resources.Load<Sprite>(@"Images\TXT"));
+        TraitTypeSprites.Add(TraitType.CHK, Resources.Load<Sprite>(@"Images\CHK"));
+        TraitTypeSprites.Add(TraitType.NUM, Resources.Load<Sprite>(@"Images\NUM"));
+        TraitTypeSprites.Add(TraitType.TAG, Resources.Load<Sprite>(@"Images\TAG"));
 
         RadialGreen = Resources.Load<Sprite>(@"Images\RadialGreen.png");
         Trash = Resources.Load<Sprite>(@"Images\trash.png");

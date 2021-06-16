@@ -4,10 +4,10 @@ using System.Linq;
 using UnityEngine;
 
 
-public class DescrSceneMonitor : MonoBehaviour
+public class TraitSceneMonitor : MonoBehaviour
 {
     [SerializeField]
-    DescrListMonitor listMonitor = null;
+    TraitListMonitor listMonitor = null;
     
     // Awake is called before Start()
     private void Awake()
@@ -23,15 +23,15 @@ public class DescrSceneMonitor : MonoBehaviour
     public void New_Click()
     {
         //Descriptor.CreateNew(DescrType.Text); // swap for type selector
-        MenuManager.GoToMenu(MenuName.NewDescr);
+        MenuManager.GoToMenu(MenuName.NewTrait);
         StartCoroutine(WaitForClose());
     }
 
     IEnumerator WaitForClose()
     {
         yield return new WaitWhile(MenuManager.MenuOpen);
-        Descriptor descr = Descriptor.List.Last();
-        listMonitor.AddToGrid(descr, Loader.GetPanel<Descriptor>(listMonitor, descr));
+        Trait trait = Trait.List.Last();
+        listMonitor.AddToGrid(trait, Loader.GetPanel<Trait>(listMonitor, trait));
         //listMonitor.PopulateGrid(); // replace with add to grid
         yield return null;
     }

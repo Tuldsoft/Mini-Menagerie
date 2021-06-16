@@ -3,28 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DescrDetailsMonitor_TXT : DescrDetailsMonitor
+public class TraitDetailsMonitor_TXT : TraitDetailsMonitor
 {
     [SerializeField]
     Text defaultText = null;
 
     InputField defaultInputField;
 
-    Descriptor_Text descrTXT;
+    Trait_TXT traitTXT;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
-        descrTXT = (descr as Descriptor_Text);
+        traitTXT = (trait as Trait_TXT);
         defaultInputField = defaultText.GetComponent<InputField>();
-        defaultInputField.text = descrTXT.DefaultText;
+        defaultInputField.text = traitTXT.DefaultText;
 
     }
     
     public void Default_Enter(string value)
     {
-        descrTXT.DefaultText = value;
-        defaultInputField.text = descrTXT.DefaultText;
+        traitTXT.DefaultText = value;
+        defaultInputField.text = traitTXT.DefaultText;
     }
 }
