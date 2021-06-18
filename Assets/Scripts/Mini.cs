@@ -82,11 +82,14 @@ public class Mini : IComparable<Mini>
         if (trait == null)
             trait = new Trait_TXT();
 
-        // add logic here for copying from the Descriptor.List
-
         Traits.AddTrait(trait);
                 
         return trait;
+    }
+
+    public bool RemoveTrait(Trait trait)
+    {
+        return Traits.RemoveTrait(trait);
     }
 
     // Override

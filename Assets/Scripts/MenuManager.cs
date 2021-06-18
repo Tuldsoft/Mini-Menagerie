@@ -25,7 +25,8 @@ public enum MenuName
     NewTraitCHK,
     NewTraitNUM,
     NewTraitTAG,
-    TraitDetails
+    TraitDetails,
+    ShowHide
 }
 public enum MenuType
 {
@@ -48,7 +49,7 @@ static public class MenuManager
     static GameObject prefabTraitDetails_CHK = null;
     static GameObject prefabTraitDetails_NUM = null;
     static GameObject prefabTraitDetails_TAG = null;
-
+    static GameObject prefabShowHideMenu = null;
 
     static GameObject PrefabTraitDetails
     {
@@ -95,6 +96,7 @@ static public class MenuManager
         prefabTraitDetails_CHK = Resources.Load<GameObject>(@"Prefabs\TraitScene\prefabTraitDetails_CHK");
         prefabTraitDetails_NUM = Resources.Load<GameObject>(@"Prefabs\TraitScene\prefabTraitDetails_NUM");
         prefabTraitDetails_TAG = Resources.Load<GameObject>(@"Prefabs\TraitScene\prefabTraitDetails_TAG");
+        prefabShowHideMenu = Resources.Load<GameObject>(@"Prefabs\Menus\prefabShowHideMenu");
     }
     
     // Switchboard for most menu transitions, either through moving to a new scene
@@ -178,6 +180,11 @@ static public class MenuManager
             case MenuName.TraitDetails:
                 menuOpen = true;
                 GameObject.Instantiate(PrefabTraitDetails);
+                break;
+
+            case MenuName.ShowHide:
+                menuOpen = true;
+                GameObject.Instantiate(prefabShowHideMenu);
                 break;
 
             default:

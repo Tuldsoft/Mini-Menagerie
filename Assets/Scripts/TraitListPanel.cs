@@ -8,7 +8,7 @@ public class TraitListPanel : ScrollListPanel<Trait>
     [SerializeField]
     protected Text nameText;
     [SerializeField]
-    protected Image typeImage, radiantImage, defaultImage, trashbutton;
+    protected Image typeImage, radiantImage, allMinisImage, trashbutton;
 
     protected Trait trait = null;
     bool isPickerPanel = false;
@@ -47,7 +47,7 @@ public class TraitListPanel : ScrollListPanel<Trait>
         
     }
 
-
+    // overriden by TraitPickerPanel
     public virtual void Panel_Click()
     {
         if (isPickerPanel)
@@ -68,10 +68,29 @@ public class TraitListPanel : ScrollListPanel<Trait>
         }
     }
 
+
     IEnumerator WaitForClose()
     {
         yield return new WaitWhile(MenuManager.MenuOpen);
         monitor.PopulateGrid();
         yield return null;
     }
+
+    public void TrashButton_Click()
+    {
+        MenuManager.LaunchDialogBox(DialogBoxType.OKCancel, $"Destroying {trait.Name} will remove it from all minis. Proceed?");
+        StartCoroutine(MenuManager.WaitForClose(RemoveFromAll));
+    }
+
+    void RemoveFromAll()
+    {
+        if (DialogBoxMonitor.Response == DialogBoxResponse.OK)
+        {
+            MiniCollection.RemoveTraitFromAllMinis(trait);
+            Trait.RemoveTrait(trait);
+            monitor.PopulateGrid();
+        }
+    }
+
+
 }

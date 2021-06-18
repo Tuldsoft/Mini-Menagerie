@@ -61,6 +61,7 @@
     <Compile Include="Assets\Scripts\MiniTraitListPanel_CHK.cs" />
     <Compile Include="Assets\Scripts\TraitSceneMonitor.cs" />
     <Compile Include="Assets\Scripts\MiniCollection.cs" />
+    <Compile Include="Assets\Scripts\AboutSceneMonitor.cs" />
     <Compile Include="Assets\Scripts\TraitListMonitor.cs" />
     <Compile Include="Assets\Scripts\ThumbListPanel.cs" />
     <Compile Include="Assets\Scripts\MenuItem.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Assets\Scripts\MiniID.cs" />
     <Compile Include="Assets\Scripts\NewTraitListPanel.cs" />
     <Compile Include="Assets\Scripts\Mini.cs" />
+    <Compile Include="Assets\Scripts\ShowHideListMonitor.cs" />
     <Compile Include="Assets\Scripts\ThumbListMonitor.cs" />
     <Compile Include="Assets\Scripts\MiniTraitListPanel.cs" />
     <Compile Include="Assets\Scripts\TraitDetailsMonitor_TXT.cs" />
@@ -87,14 +89,14 @@
     <Compile Include="Assets\Scripts\TraitPickerMonitor.cs" />
     <Compile Include="Assets\Scripts\MenuMonitor.cs" />
     <Compile Include="Assets\Scripts\ScrollListPanel.cs" />
+    <Compile Include="Assets\Scripts\ShowHideListPanel.cs" />
+    <Compile Include="Assets\Scripts\DialogBoxMonitor.cs" />
     <Compile Include="Assets\Scripts\TraitDetailsMonitor_NUM.cs" />
     <Compile Include="Assets\Scripts\MiniListMonitor.cs" />
     <Compile Include="Assets\Scripts\MiniTraitListMonitor.cs" />
     <Compile Include="Assets\Scripts\Trait.cs" />
     <Compile Include="Assets\Scripts\CuttingRoom.cs" />
     <Compile Include="Assets\Scripts\MiniListPanel.cs" />
-    <Compile Include="Assets\Scripts\DialogBoxMonitor.cs" />
-    <Compile Include="Assets\Scripts\AboutSceneMonitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -11,7 +11,9 @@ public class MiniSceneMonitor : MonoBehaviour
 
     [SerializeField]
     GameObject MainScrollContent = null;
-    
+
+    ScrollListMonitor<Trait> traitListMonitor;
+
     // Awake is called before Start
     private void Awake()
     {
@@ -32,6 +34,7 @@ public class MiniSceneMonitor : MonoBehaviour
 
         MainScrollContent.GetComponent<GridLayoutGroup>().cellSize = newCellSize;
 
+        traitListMonitor = gameObject.GetComponentInChildren<ScrollListMonitor<Trait>>();
 
     }
 
@@ -45,5 +48,11 @@ public class MiniSceneMonitor : MonoBehaviour
     {
         Mini.ActiveMini.Rename(value);
         NameText.text = Mini.ActiveMini.Name;
+    }
+
+    public void ShowHide_Click()
+    {
+        MenuManager.GoToMenu(MenuName.ShowHide);
+        StartCoroutine(MenuManager.WaitForClose(traitListMonitor.PopulateGrid));
     }
 }

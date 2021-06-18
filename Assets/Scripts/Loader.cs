@@ -15,7 +15,7 @@ static public class Loader
     // Thumbpanel
     static public GameObject ThumbPanel { get; private set; }
 
-    // MiniDescrListPanels
+    // MiniTraitListPanels
     static public Dictionary<TraitType, GameObject> MiniTraitPanels { get; private set; }
     static GameObject miniTraitPanel_TXT = null;
     static GameObject miniTraitPanel_CHK = null;
@@ -24,10 +24,11 @@ static public class Loader
 
     static public GameObject MiniTraitPanel_New { get; private set; }
 
-    // DescrPanel (also used in TraitPicker)
+    // TraitPanel (also used in TraitPicker)
     static public GameObject TraitPanel { get; private set; }
 
-    
+    // Used by ShowHideMonitor
+    static public GameObject ShowHidePanel { get; private set; }
 
 
     static public void Initialize()
@@ -60,6 +61,7 @@ static public class Loader
         // Trait Panel (Trait scene and Trait Picker)
         TraitPanel = Resources.Load<GameObject>(@"Prefabs\TraitScene\prefabTraitPanel");
 
+        ShowHidePanel = Resources.Load<GameObject>(@"Prefabs\Menus\prefabShowHidePanel");
     }
 
 
@@ -83,6 +85,8 @@ static public class Loader
         if (monitor is MiniListMonitor)
             return (listItem is null ? MiniPanel_New : MiniPanel);
 
+        if (monitor is ShowHideListMonitor)
+            return ShowHidePanel;
 
         return null;
     }

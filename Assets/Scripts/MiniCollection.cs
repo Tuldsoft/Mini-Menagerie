@@ -30,4 +30,12 @@ static public class MiniCollection
             mini.AddTrait(Trait.Copy(trait));
         }
     }
+
+    static public void RemoveTraitFromAllMinis(Trait trait)
+    {
+        foreach (Mini mini in Minis)
+        {
+            mini.RemoveTrait(trait);
+        }
+    }
 }

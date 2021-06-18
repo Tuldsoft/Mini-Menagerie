@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TraitListMonitor : ScrollListMonitor<Trait>
 {
+    protected override IEnumerable<Trait> ReferenceList => Trait.List;
 
     protected override void Start()
     {
@@ -12,7 +13,6 @@ public class TraitListMonitor : ScrollListMonitor<Trait>
         
 
         keepFirstPanel = false;
-        referenceList = Trait.List;
 
         base.Start();
     }

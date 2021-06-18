@@ -14,13 +14,17 @@ public abstract class ScrollListMonitor<T> : MonoBehaviour where T : IComparable
     //protected GameObject prefabPanel = null;     // now managed by Loader
     //protected GameObject prefabNewPanel = null;  // now managed by Loader
 
-    protected IEnumerable<T> referenceList;        // set by Start() in children
-
     protected bool keepFirstPanel = false;         // set by Start() in children
     protected bool newAsLastPanel = false;         // set by Start() in children
 
     #endregion
 
+    #region Abstract Properties
+
+    // Each child must define its own ReferenceList
+    protected abstract IEnumerable<T> ReferenceList { get; } // children need to define this
+    
+    #endregion
 
     // Start is called before the first frame update
     protected virtual void Start()
@@ -38,7 +42,7 @@ public abstract class ScrollListMonitor<T> : MonoBehaviour where T : IComparable
 
         //GameObject newPanel;
 
-        foreach (T listItem in referenceList)
+        foreach (T listItem in ReferenceList)
         {
             AddToGrid(listItem, Loader.GetPanel<T>(this, listItem));
         }

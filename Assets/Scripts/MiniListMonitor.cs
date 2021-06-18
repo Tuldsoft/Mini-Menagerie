@@ -7,6 +7,7 @@ using UnityEngine;
 // Used in the BrowseScene
 public class MiniListMonitor : ScrollListMonitor<Mini>
 {
+    protected override IEnumerable<Mini> ReferenceList { get => MiniCollection.Minis; }
 
     protected override void Start()
     {
@@ -14,8 +15,6 @@ public class MiniListMonitor : ScrollListMonitor<Mini>
         //prefabPanel = Resources.Load<GameObject>(@"Prefabs\prefabMiniPanel");
         //prefabNewPanel = Resources.Load<GameObject>(@"Prefabs\prefabNewMiniPanel");
         newAsLastPanel = true;
-
-        referenceList = MiniCollection.Minis;  // used to populate the list
 
         base.Start();
     }

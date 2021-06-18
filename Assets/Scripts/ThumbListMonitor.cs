@@ -9,6 +9,10 @@ using UnityEngine.UI;
 
 public class ThumbListMonitor : ScrollListMonitor<Mini>
 {
+    // unused. Mini.ActiveMini.Photos used in PopulateGrid override below
+    protected override IEnumerable<Mini> ReferenceList { get => null; } 
+
+
     [SerializeField]
     public Image BigThumb = null;
 

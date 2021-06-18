@@ -22,7 +22,6 @@ public class TraitSceneMonitor : MonoBehaviour
 
     public void New_Click()
     {
-        //Descriptor.CreateNew(DescrType.Text); // swap for type selector
         MenuManager.GoToMenu(MenuName.NewTrait);
         StartCoroutine(WaitForClose());
     }
@@ -32,7 +31,6 @@ public class TraitSceneMonitor : MonoBehaviour
         yield return new WaitWhile(MenuManager.MenuOpen);
         Trait trait = Trait.List.Last();
         listMonitor.AddToGrid(trait, Loader.GetPanel<Trait>(listMonitor, trait));
-        //listMonitor.PopulateGrid(); // replace with add to grid
         yield return null;
     }
 

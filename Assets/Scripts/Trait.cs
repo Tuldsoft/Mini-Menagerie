@@ -40,7 +40,7 @@ public class Trait : IComparable<Trait>, IEquatable<Trait>
     public bool IncludeAll { get => master.includeAll; set => master.includeAll = value; }
 
     // Properties unique to this Trait
-    bool Show { get; set; } = true;
+    public bool Show { get; set; } = true;
 
     // Static properties
     static bool initialized = false;

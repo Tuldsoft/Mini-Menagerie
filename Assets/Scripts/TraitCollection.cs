@@ -12,8 +12,9 @@ public class TraitCollection
     public bool AddTrait(Trait trait)
     {
         // Unique only
-        if (List.Contains(trait)) 
+        if (List.Contains(trait))
             return false;
+            
         
         List.Add(trait);
         return true;
