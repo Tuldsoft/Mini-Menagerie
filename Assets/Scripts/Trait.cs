@@ -304,6 +304,7 @@ public class Trait_NUM : Trait
     }
     const int MaxPrecision = 5;
     private string precisionFormat { get => String.Format("N{0}", Precision); }
+    public string PrecisionSample { get => (precision).ToString(precisionFormat); }
 
 
 
@@ -342,7 +343,7 @@ public class Trait_NUM : Trait
         decimal? result = numIndex == NumIndex.Value ? nums[0] : masterNUM.nums[(int)numIndex];
 
         if (result == null) 
-            return String.Empty;
+            return null;
 
         return ((decimal)result).ToString(precisionFormat);
     }

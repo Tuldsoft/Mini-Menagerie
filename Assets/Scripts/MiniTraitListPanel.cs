@@ -22,8 +22,6 @@ public abstract class MiniTraitListPanel : ScrollListPanel<Trait>
             trait = setTrait;
             nameText.text = trait.Name;
             trashButton.interactable = !trait.IncludeAll;
-
-            //Utils.SetButtonColors(gameObject.GetComponentInChildren<Button>());
         }
     }
 

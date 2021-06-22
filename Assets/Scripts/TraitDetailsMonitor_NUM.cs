@@ -68,7 +68,7 @@ public class TraitDetailsMonitor_NUM : TraitDetailsMonitor
         minIF.text = traitNUM.Min ?? "None";
         maxIF.text = traitNUM.Max ?? "None";
         incrementIF.text = traitNUM.Increment ?? "1";
-        precisionText.text = traitNUM.Precision.ToString();
+        precisionText.text = traitNUM.PrecisionSample;
     }
 
 }
