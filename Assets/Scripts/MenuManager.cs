@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
@@ -44,6 +45,7 @@ static public class MenuManager
 
     static GameObject prefabMenu = null;
     static GameObject prefabDialog = null;
+    static GameObject prefabPopup = null;
     static GameObject prefabTraitPicker = null;
     static GameObject prefabTraitDetails_TXT = null;
     static GameObject prefabTraitDetails_CHK = null;
@@ -91,6 +93,7 @@ static public class MenuManager
     {
         prefabMenu = Resources.Load<GameObject>(@"Prefabs\Menus\prefabMenu");
         prefabDialog = Resources.Load<GameObject>(@"Prefabs\Menus\prefabDialog");
+        prefabPopup = Resources.Load<GameObject>(@"Prefabs\Menus\prefabPopup");
         prefabTraitPicker = Resources.Load<GameObject>(@"Prefabs\Menus\prefabTraitPicker");
         prefabTraitDetails_TXT = Resources.Load<GameObject>(@"Prefabs\TraitScene\prefabTraitDetails_TXT");
         prefabTraitDetails_CHK = Resources.Load<GameObject>(@"Prefabs\TraitScene\prefabTraitDetails_CHK");
@@ -230,6 +233,18 @@ static public class MenuManager
 
         GameObject menu = GameObject.Instantiate(prefabDialog);
         // no SetBox() required this time
+    }
+
+    static public async Task<PopupResult> LaunchPopup(PopupType pType, string message, CancellationToken ct = default)
+    {
+        GameObject menu = GameObject.Instantiate(prefabPopup);
+        PopupMonitor monitor = menu.GetComponent<PopupMonitor>();
+        PopupResult result = await monitor.SetPopupAsync(pType, message, ct);
+
+        // once result is obtained, destroy the menu
+        GameObject.Destroy(menu);
+
+        return result;
     }
 
     /*static public async Task<DialogBoxResponse> DialogBoxQueryAsync (DialogBoxType dbType, string message)

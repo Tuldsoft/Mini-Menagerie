@@ -24,6 +24,7 @@ static public class Initializer
         MenuManager.Initialize();
         Loader.Initialize();
         DialogBoxMonitor.Initialize();
+        PopupMonitor.Initialize();
 
     }
 }

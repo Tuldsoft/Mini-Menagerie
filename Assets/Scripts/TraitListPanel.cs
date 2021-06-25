@@ -47,7 +47,7 @@ public class TraitListPanel : ScrollListPanel<Trait>
         
     }
 
-    // overriden by TraitPickerPanel
+    // used by both TraitListMonitor and TraitPickerMonitor
     public virtual void Panel_Click()
     {
         if (isPickerPanel)
@@ -76,10 +76,21 @@ public class TraitListPanel : ScrollListPanel<Trait>
         yield return null;
     }
 
-    public void TrashButton_Click()
+    public async void TrashButton_Click()
     {
-        MenuManager.LaunchDialogBox(DialogBoxType.OKCancel, $"Destroying {trait.Name} will remove it from all minis. Proceed?");
-        StartCoroutine(MenuManager.WaitForClose(RemoveFromAll));
+        PopupResult popResult = await MenuManager.LaunchPopup(PopupType.OKCancel,
+            $"Destroying {trait.Name} will remove it from all minis. Proceed?");
+
+        // dialogbox and coroutine replaced with async version
+        /*MenuManager.LaunchDialogBox(DialogBoxType.OKCancel, $"Destroying {trait.Name} will remove it from all minis. Proceed?");
+        StartCoroutine(MenuManager.WaitForClose(RemoveFromAll));*/
+
+        if (popResult == PopupResult.OK)
+        {
+            MiniCollection.RemoveTraitFromAllMinis(trait);
+            Trait.RemoveTrait(trait);
+            monitor.PopulateGrid();
+        }
     }
 
     void RemoveFromAll()

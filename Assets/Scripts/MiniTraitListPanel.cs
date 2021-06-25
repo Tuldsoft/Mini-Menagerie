@@ -33,13 +33,23 @@ public abstract class MiniTraitListPanel : ScrollListPanel<Trait>
         return test;
     }
 
-    public void RemoveButton_Click()
+    public async void RemoveButton_Click()
     {
-        MenuManager.LaunchDialogBox(DialogBoxType.OKCancel, $"Remove {trait.Name}?");
-        StartCoroutine(MenuManager.WaitForClose(RemoveTrait));
+        PopupResult popResult = await MenuManager.LaunchPopup(PopupType.OKCancel,
+            $"Remove {trait.Name}?");
+
+        //dialogbox replaced with popup
+        //MenuManager.LaunchDialogBox(DialogBoxType.OKCancel, $"Remove {trait.Name}?");
+        //StartCoroutine(MenuManager.WaitForClose(RemoveTrait));
+
+        if (popResult == PopupResult.OK)
+        {
+            Mini.ActiveMini.RemoveTrait(trait);
+            monitor.PopulateGrid();
+        }
     }
 
-    void RemoveTrait()
+    /*void RemoveTrait()
     {
         if (DialogBoxMonitor.Response == DialogBoxResponse.OK)
         {
@@ -47,5 +57,5 @@ public abstract class MiniTraitListPanel : ScrollListPanel<Trait>
             monitor.PopulateGrid();
         }
         
-    }
+    }*/
 }

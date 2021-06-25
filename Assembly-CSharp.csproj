@@ -96,6 +96,7 @@
     <Compile Include="Assets\Scripts\MiniTraitListMonitor.cs" />
     <Compile Include="Assets\Scripts\Trait.cs" />
     <Compile Include="Assets\Scripts\CuttingRoom.cs" />
+    <Compile Include="Assets\Scripts\PopupMonitor.cs" />
     <Compile Include="Assets\Scripts\MiniListPanel.cs" />
   </ItemGroup>
   <ItemGroup>

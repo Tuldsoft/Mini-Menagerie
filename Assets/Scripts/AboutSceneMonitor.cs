@@ -10,9 +10,12 @@ public class AboutSceneMonitor : MonoBehaviour
 
     }
 
-    public void Debug_Click()
+    public async void Debug_Click()
     {
-        //MenuManager.LaunchDialogBox(DialogBoxType.YesNoCancel, "New Message");
+
+        PopupResult pResult = await MenuManager.LaunchPopup(PopupType.YesNo, "This is a test message");
+
+        Debug.Log("Result is: " + pResult.ToString());
 
     }
 }
