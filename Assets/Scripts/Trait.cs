@@ -33,8 +33,8 @@ public class Trait : IComparable<Trait>, IEquatable<Trait>
     string name;
     public string Name { get => master.name; }
 
-    TraitType type;
-    public TraitType Type { get => master.type; }
+    TraitType tType;
+    public TraitType TType { get => master.tType; }
 
     bool includeAll = false;
     public bool IncludeAll { get => master.includeAll; set => master.includeAll = value; }
@@ -49,6 +49,7 @@ public class Trait : IComparable<Trait>, IEquatable<Trait>
     static public List<Trait> List { get => collection.List; }
     static public Dictionary<TraitType, Action> Constructors { get; private set; }
     static public Dictionary<Type, ConstructorInfo> CopyConstructors { get; private set; }
+    static public Dictionary<TraitType, string> DefaultTraitNames { get; private set; }
 
     static public IEnumerable<string> Names { 
         get
@@ -78,7 +79,7 @@ public class Trait : IComparable<Trait>, IEquatable<Trait>
             testName = $"{name} ({i++})";
         }
 
-        this.type = type;
+        this.tType = type;
         this.id = Guid.NewGuid();
 
         collection.AddTrait(this);
@@ -154,6 +155,12 @@ public class Trait : IComparable<Trait>, IEquatable<Trait>
         ctorInfo = typeof(Trait_TAG).GetConstructor(new[] { typeof(Trait_TAG) });
         CopyConstructors.Add(typeof(Trait_TAG), ctorInfo);
 
+        DefaultTraitNames = new Dictionary<TraitType, string>();
+        DefaultTraitNames.Add(TraitType.TXT, defaultName_TXT);
+        DefaultTraitNames.Add(TraitType.CHK, defaultName_CHK);
+        DefaultTraitNames.Add(TraitType.NUM, defaultName_NUM);
+        DefaultTraitNames.Add(TraitType.TAG, defaultName_TAG);
+
         CreateNew(TraitType.TXT);
         CreateNew(TraitType.CHK);
         CreateNew(TraitType.NUM);
@@ -162,14 +169,34 @@ public class Trait : IComparable<Trait>, IEquatable<Trait>
 
     }
 
+    // Converts a TraitType to a typeof Trait
+    static Type GetType(TraitType tType)
+    {
+        return tType switch
+        {
+            TraitType.TXT => typeof(Trait_TXT),
+            TraitType.CHK => typeof(Trait_CHK),
+            TraitType.NUM => typeof(Trait_NUM),
+            TraitType.TAG => typeof(Trait_TAG),
+            _ => typeof(Trait_TXT),
+        };
+    }
+
+
     static public void RemoveTrait(Trait trait)
     {
         collection.RemoveTrait(trait);
     }
 
-    static public void CreateNew(TraitType type)
+    
+
+    static public Trait CreateNew(TraitType tType)
     {
-        Constructors[type].DynamicInvoke();
+        ConstructorInfo info = GetType(tType).GetConstructor(new[] { typeof(string) });
+        return (Trait)info?.Invoke(new string[] { DefaultTraitNames[tType] });
+
+
+        //return (Trait)Constructors[type].DynamicInvoke();
     }
 
     // Makes use of copy constructor to recreate a trait from the master collection

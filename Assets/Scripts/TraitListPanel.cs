@@ -22,7 +22,7 @@ public class TraitListPanel : ScrollListPanel<Trait>
         {
             trait = tr;
             nameText.text = tr.Name;
-            typeImage.sprite = ImageUtils.TraitTypeSprites[tr.Type];
+            typeImage.sprite = ImageUtils.TraitTypeSprites[tr.TType];
             radiantImage.enabled = tr.IncludeAll;
             //default image is included in the prefab
             //trashbutton image is included in the prefab
@@ -78,7 +78,7 @@ public class TraitListPanel : ScrollListPanel<Trait>
 
     public async void TrashButton_Click()
     {
-        PopupResult popResult = await MenuManager.LaunchPopup(PopupType.OKCancel,
+        PopupResult popResult = await MenuManager.LaunchPopupAsync(PopupType.OKCancel,
             $"Destroying {trait.Name} will remove it from all minis. Proceed?");
 
         // dialogbox and coroutine replaced with async version

@@ -13,7 +13,7 @@ public class AboutSceneMonitor : MonoBehaviour
     public async void Debug_Click()
     {
 
-        PopupResult pResult = await MenuManager.LaunchPopup(PopupType.YesNo, "This is a test message");
+        PopupResult pResult = await MenuManager.LaunchPopupAsync(PopupType.YesNo, "This is a test message");
 
         Debug.Log("Result is: " + pResult.ToString());
 

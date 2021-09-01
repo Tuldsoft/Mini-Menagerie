@@ -35,7 +35,7 @@ public abstract class MiniTraitListPanel : ScrollListPanel<Trait>
 
     public async void RemoveButton_Click()
     {
-        PopupResult popResult = await MenuManager.LaunchPopup(PopupType.OKCancel,
+        PopupResult popResult = await MenuManager.LaunchPopupAsync(PopupType.OKCancel,
             $"Remove {trait.Name}?");
 
         //dialogbox replaced with popup

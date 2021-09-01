@@ -71,7 +71,7 @@ static public class Loader
         if (monitor is MiniTraitListMonitor)
         {
             Trait trait = listItem as Trait;
-            return (trait is null ? MiniTraitPanel_New : MiniTraitPanels[trait.Type]);
+            return (trait is null ? MiniTraitPanel_New : MiniTraitPanels[trait.TType]);
         }
 
         if (monitor is TraitListMonitor

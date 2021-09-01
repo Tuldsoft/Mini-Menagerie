@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// REFACTOR: HashSet is a better container for unique-only traits, should work
+//   because Trait is IComparable
+
 // A container of Traits, used by each Mini and by Trait
 public class TraitCollection 
 {

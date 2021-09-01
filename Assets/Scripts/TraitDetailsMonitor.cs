@@ -40,7 +40,7 @@ public class TraitDetailsMonitor : MonoBehaviour
             "Disabling this does not remove it on existing minis." :
             "Enabling this will include the trait on any Mini that does not yet have it yet.";
 
-        popResult = await MenuManager.LaunchPopup(PopupType.OKCancel, message);
+        popResult = await MenuManager.LaunchPopupAsync(PopupType.OKCancel, message);
 
         // old version that used coroutines and delegates and static members
         /*if (trait.IncludeAll) // trait is currently set to true, but toggle just turned off

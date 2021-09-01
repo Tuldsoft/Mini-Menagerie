@@ -11,7 +11,9 @@ public class NewMiniListPanel : ScrollListPanel<Mini>
     public void NewButton_Click()
     {
         MiniCollection.NewMini();
+        // later replace PopulateGrid with AddToGrid
         monitor.PopulateGrid(true); // include ScrollToEnd()
+
     }
 
 }

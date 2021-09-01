@@ -40,7 +40,12 @@ public class Mini : IComparable<Mini>
 
         Thumbnail = Photos[0];
 
-        //Descriptors.Add(new Descriptor_Text());
+        // Add any trait marked as IncludeAll
+        foreach (Trait trait in Trait.List)
+        {
+            if (trait.IncludeAll)
+                Traits.AddTrait(trait);
+        }
 
     }
 

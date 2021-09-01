@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine;
 /// </summary>
 class CuttingRoom 
 {
-    
+
 }
 
 // Attempting now to abandon the use of NameType, as it is proving unreliable
