@@ -9,16 +9,10 @@ public class NewTraitListPanel : ScrollListPanel<Trait>
 
     public void NewButton_Click()
     {
+        // Make an async version of traitpicker launch
         MenuManager.GoToMenu(MenuName.TraitPicker);
 
-        StartCoroutine(WaitForClose());
-    }
-
-    IEnumerator WaitForClose()
-    {
-        yield return new WaitWhile(MenuManager.MenuOpen);
-        monitor.PopulateGrid();
-        yield return null;
+        StartCoroutine(MenuManager.WaitForClose(monitor.PopulateGrid));
     }
 
 }

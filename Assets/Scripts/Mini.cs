@@ -44,7 +44,7 @@ public class Mini : IComparable<Mini>
         foreach (Trait trait in Trait.List)
         {
             if (trait.IncludeAll)
-                Traits.AddTrait(trait);
+                Traits.AddTrait(Trait.Copy(trait));
         }
 
     }
@@ -82,7 +82,8 @@ public class Mini : IComparable<Mini>
         Name = name;
     }
 
-    public Trait AddTrait(Trait trait = null)
+    // redundant - use mini.Traits.AddTrait()
+    /*public Trait AddTrait(Trait trait = null)
     {
         if (trait == null)
             trait = new Trait_TXT();
@@ -90,7 +91,7 @@ public class Mini : IComparable<Mini>
         Traits.AddTrait(trait);
                 
         return trait;
-    }
+    }*/
 
     public bool RemoveTrait(Trait trait)
     {

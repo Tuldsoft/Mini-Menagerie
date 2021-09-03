@@ -23,7 +23,6 @@ static public class Initializer
         Trait.Initialize();
         MenuManager.Initialize();
         Loader.Initialize();
-        DialogBoxMonitor.Initialize();
         PopupMonitor.Initialize();
 
     }

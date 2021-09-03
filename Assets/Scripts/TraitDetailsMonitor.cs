@@ -42,19 +42,6 @@ public class TraitDetailsMonitor : MonoBehaviour
 
         popResult = await MenuManager.LaunchPopupAsync(PopupType.OKCancel, message);
 
-        // old version that used coroutines and delegates and static members
-        /*if (trait.IncludeAll) // trait is currently set to true, but toggle just turned off
-        {
-            MenuManager.LaunchDialogBox(DialogBoxType.OKCancel, "Disabling this does not remove it on existing minis.");
-            StartCoroutine(MenuManager.WaitForClose(DBResponse));
-        }
-        else // trait is currently set to false, but toggle just turned on
-        {
-            MenuManager.LaunchDialogBox(DialogBoxType.OKCancel, 
-                "Enabling this will include the trait on any Mini that does not yet have it yet.");
-            StartCoroutine(MenuManager.WaitForClose(DBResponse));
-        }*/
-
         // result handling now done asyncronously, in-method
         if (popResult == PopupResult.OK)
         {
@@ -72,36 +59,6 @@ public class TraitDetailsMonitor : MonoBehaviour
 
         toggling = false;
     }
-
-    // coroutine-based dialogbox is no longer needed, no more referencing static members
-    /*void DBResponse()
-    {
-        if (trait.IncludeAll) // trait is currently set to true, but toggle just turned off
-        {
-            if (DialogBoxMonitor.Response == DialogBoxResponse.OK)
-            {
-                trait.IncludeAll = includeToggle.isOn; // false
-            }
-            else
-            {
-                // ANYTIME THIS IS SET IT RETRIGGERS THE DIALOGBOX
-                includeToggle.isOn = trait.IncludeAll; // re-tick to true
-            }
-        }
-        else  // trait is currently set to false, but toggle just turned on
-        {
-            if (DialogBoxMonitor.Response == DialogBoxResponse.OK)
-            {
-                trait.IncludeAll = includeToggle.isOn; // true
-                MiniCollection.AddTraitToAllMinis(trait);
-            }
-            else
-            {
-                includeToggle.isOn = trait.IncludeAll; // re-tick back to false
-            }
-        }
-        toggling = false;
-    }*/
 
     public void Close_Click()
     {

@@ -44,7 +44,6 @@ static public class MenuManager
     static public Dictionary<MenuType, Dictionary<object, string>> MenuNamesDict { get; private set; }
 
     static GameObject prefabMenu = null;
-    //static GameObject prefabDialog = null;
     static GameObject prefabPopup = null;
     static GameObject prefabTraitPicker = null;
     static GameObject prefabTraitDetails_TXT = null;
@@ -82,38 +81,41 @@ static public class MenuManager
 
         initialized = true;
 
-        InitializeNames();
+        InitializeNames(); // Menu Packs
 
         Mini.SetActiveMini(MiniCollection.Minis[0]);
 
-        LoadPrefabs();
+        LoadPrefabs();     // Load prefabs from Resources
     }
 
+    // Load prefabs from Resources folder, from Initialize()
     static void LoadPrefabs()
     {
-        prefabMenu = Resources.Load<GameObject>(@"Prefabs\Menus\prefabMenu");
-        //prefabDialog = Resources.Load<GameObject>(@"Prefabs\Menus\prefabDialog");
-        prefabPopup = Resources.Load<GameObject>(@"Prefabs\Menus\prefabPopup");
-        prefabTraitPicker = Resources.Load<GameObject>(@"Prefabs\Menus\prefabTraitPicker");
-        prefabTraitDetails_TXT = Resources.Load<GameObject>(@"Prefabs\TraitScene\prefabTraitDetails_TXT");
-        prefabTraitDetails_CHK = Resources.Load<GameObject>(@"Prefabs\TraitScene\prefabTraitDetails_CHK");
-        prefabTraitDetails_NUM = Resources.Load<GameObject>(@"Prefabs\TraitScene\prefabTraitDetails_NUM");
-        prefabTraitDetails_TAG = Resources.Load<GameObject>(@"Prefabs\TraitScene\prefabTraitDetails_TAG");
-        prefabShowHideMenu = Resources.Load<GameObject>(@"Prefabs\Menus\prefabShowHideMenu");
+        prefabMenu = Resources.Load<GameObject>(
+            @"Prefabs\Menus\prefabMenu");
+        prefabPopup = Resources.Load<GameObject>(
+            @"Prefabs\Menus\prefabPopup");
+        prefabTraitPicker = Resources.Load<GameObject>(
+            @"Prefabs\Menus\prefabTraitPicker");
+        prefabTraitDetails_TXT = Resources.Load<GameObject>(
+            @"Prefabs\TraitScene\prefabTraitDetails_TXT");
+        prefabTraitDetails_CHK = Resources.Load<GameObject>(
+            @"Prefabs\TraitScene\prefabTraitDetails_CHK");
+        prefabTraitDetails_NUM = Resources.Load<GameObject>(
+            @"Prefabs\TraitScene\prefabTraitDetails_NUM");
+        prefabTraitDetails_TAG = Resources.Load<GameObject>(
+            @"Prefabs\TraitScene\prefabTraitDetails_TAG");
+        prefabShowHideMenu = Resources.Load<GameObject>(
+            @"Prefabs\Menus\prefabShowHideMenu");
     }
     
-    // Switchboard for most menu transitions, either through moving to a new scene
-    // or by instantiating a overlay menu prefab
-
-    // SceneManager.LoadScene("BrowseScene");
-    // Object.Instantiate(Resources.Load(@"MenuPrefabs\prefabAboutMenu"));
-
-    // Calls a LoadScene, a submenu prefab or an async submenu
+    // Calls LoadScene, a submenu prefab, or an async submenu
     public static async void GoToMenu(MenuName choice)
     {
         switch (choice)
         {
             case MenuName.Menu:
+                // if the call is to the Menu, recursive call to the menu option selected
                 if (await LaunchMenuAsync(MenuType.Main) is MenuName nextMenu)
                     GoToMenu(nextMenu);
                 break;
@@ -156,31 +158,12 @@ static public class MenuManager
                 SceneManager.LoadScene("MiniScene");
                 break;
 
+
             // Called from MiniScene
             case MenuName.TraitPicker:
                 menuOpen = true;
                 GameObject.Instantiate(prefabTraitPicker);
                 break;
-
-            /*
-            // Called from TraitScene
-            case MenuName.NewTrait:
-                LaunchMenu(MenuType.Trait);
-                break;
-
-            // Probably should not be handled by the Menu Manager
-            case MenuName.NewTraitTXT:
-                Trait.CreateNew(TraitType.TXT); // MenuMonitor and MenuItem take it from here
-                break;
-            case MenuName.NewTraitCHK:
-                Trait.CreateNew(TraitType.CHK);
-                break;
-            case MenuName.NewTraitNUM:
-                Trait.CreateNew(TraitType.NUM);
-                break;
-            case MenuName.NewTraitTAG:
-                Trait.CreateNew(TraitType.TAG);
-                break;*/
 
             case MenuName.TraitDetails:
                 menuOpen = true;
@@ -201,6 +184,7 @@ static public class MenuManager
     // Initializes "packs" of MenuNames for different MenuTypes
     static void InitializeNames()
     {
+        // Used to populate the Main Menu
         Dictionary<object, string> MainMenuNames = new Dictionary<object, string>();
         
         MainMenuNames.Add(MenuName.Browse, "Browse");
@@ -212,6 +196,7 @@ static public class MenuManager
         MainMenuNames.Add(MenuName.Help, "Help");
         MainMenuNames.Add(MenuName.About, "About");
 
+        // Used to populate the New Trait menu (in Traits scene)
         Dictionary<object, string> NewTraitNames = new Dictionary<object, string>();
 
         NewTraitNames.Add(TraitType.TXT, "Text");
@@ -219,33 +204,14 @@ static public class MenuManager
         NewTraitNames.Add(TraitType.NUM, "Number");
         NewTraitNames.Add(TraitType.TAG, "Tags");
 
+        // Used to point to one of the object packs
         MenuNamesDict = new Dictionary<MenuType, Dictionary<object, string>>();
         MenuNamesDict.Add(MenuType.Main, MainMenuNames);
         MenuNamesDict.Add(MenuType.Trait, NewTraitNames);
 
-
-
     }
 
-    // Replaced by asnyc version
-    /*static void LaunchMenu(MenuType type = MenuType.Main)
-    {
-        menuOpen = true;
-        GameObject menu = GameObject.Instantiate(prefabMenu);
-        menu.GetComponentInChildren<MenuMonitor>().SetMenu(type);
-    }*/
-
-    // Replaced by LaunchPopupAsync
-    /*static public void LaunchDialogBox(DialogBoxType dbType, string message)
-    {
-        DialogBoxMonitor.DBType = dbType;
-        DialogBoxMonitor.Message = message;
-        menuOpen = true;
-
-        GameObject menu = GameObject.Instantiate(prefabDialog);
-        // no SetBox() required this time
-    }*/
-
+    // Launches a popup with a message (mostly yes/no/ok/cancel)
     static public async Task<PopupResult> LaunchPopupAsync(PopupType pType, string message, CancellationToken ct = default)
     {
         GameObject menu = GameObject.Instantiate(prefabPopup);
@@ -258,22 +224,14 @@ static public class MenuManager
         return result;
     }
 
-    /*static public async Task<DialogBoxResponse> DialogBoxQueryAsync (DialogBoxType dbType, string message)
-    {
-        GameObject db = GameObject.Instantiate(prefabDialog);
-        return await db.GetComponent<DialogBoxMonitor>().RunDBAsync(dbType, message);
-
-    }*/
-
+    // Launches a menu of selectable options, populated by initialized dictionary
     static public async Task<object> LaunchMenuAsync(MenuType mType, CancellationToken ct = default)
     {
         GameObject picker = GameObject.Instantiate(prefabMenu);
         MenuMonitor monitor = picker.GetComponent<MenuMonitor>();
         
-        
         object result = await monitor.SetMonitorAsync(mType, ct);
         if (result == null) return null; // Close returns null
-
 
         return mType switch
         {
@@ -284,6 +242,7 @@ static public class MenuManager
 
     }
 
+    // Adds a delegate to a button's OnClick() method, returning an object when clicked
     static public async Task<object> Button_ClickAsync(Button button, object result, CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested(); // necessary?
@@ -300,23 +259,27 @@ static public class MenuManager
 
         // this only is reached if it is the first task to complete
         return result;
+
+        // otherwise, cancellation is triggered and this method is not finished
     }
     
-    // Called by close buttons. menuObj is a prefab menu object
+    // Called by close buttons. menuObj is the open prefab menu object
     static public void CloseMenu(GameObject menuObj)
     {
         UnityEngine.Object.Destroy(menuObj);
         menuOpen = false;
     }
 
-    // TODO: Remove below three methods after coroutine version has been fully replaced
-    //   MiniScene ShowHide submenu still uses coroutine version
-    //   NewTraitListPanel still uses coroutine version (adding a trait to a Mini)
+    // TODO: Remove MenuOpen and WaitForClose after coroutine version has been fully replaced
+    //   MiniScene ShowHide submenu still uses coroutine version.
+    //   NewTraitListPanel/TraitPicker still uses coroutine version (adding a trait to a Mini)
+    //   TraitDetails still uses coroutine version.
     static public bool MenuOpen()
     {
         return menuOpen;
     }
 
+    // Used to delay an action until CloseMenu() has been called
     static public IEnumerator WaitForClose(Action action)
     {
         yield return new WaitWhile(MenuManager.MenuOpen);

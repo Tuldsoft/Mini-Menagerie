@@ -38,24 +38,11 @@ public abstract class MiniTraitListPanel : ScrollListPanel<Trait>
         PopupResult popResult = await MenuManager.LaunchPopupAsync(PopupType.OKCancel,
             $"Remove {trait.Name}?");
 
-        //dialogbox replaced with popup
-        //MenuManager.LaunchDialogBox(DialogBoxType.OKCancel, $"Remove {trait.Name}?");
-        //StartCoroutine(MenuManager.WaitForClose(RemoveTrait));
-
         if (popResult == PopupResult.OK)
         {
             Mini.ActiveMini.RemoveTrait(trait);
             monitor.PopulateGrid();
         }
     }
-
-    /*void RemoveTrait()
-    {
-        if (DialogBoxMonitor.Response == DialogBoxResponse.OK)
-        {
-            Mini.ActiveMini.RemoveTrait(trait);
-            monitor.PopulateGrid();
-        }
-        
-    }*/
+    
 }

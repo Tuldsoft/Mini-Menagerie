@@ -15,10 +15,9 @@ public class TraitCollection
     public bool AddTrait(Trait trait)
     {
         // Unique only
-        if (List.Contains(trait))
+        if (List.Contains(trait) || trait == null)
             return false;
             
-        
         List.Add(trait);
         return true;
     }
@@ -28,42 +27,6 @@ public class TraitCollection
     {
         return List.Remove(trait);
     }
-
-    
-    // Redo this so that a Mini's collection is exclusive, not handled by copy constructor alone
-
-    // see Trait.Copy(Trait trait)
-    /*public Trait CopyTrait(Trait trait)
-    {
-        // Only copy Descriptors in the Collection
-        if (!List.Contains(trait)) return null;
-
-        // Make sure we are using the one from the List
-        trait = List[List.IndexOf(trait)];
-
-        Trait copy;
-
-        switch (trait.Type)
-        {
-            case TraitType.TXT:
-                copy = new Trait_TXT(trait as Trait_TXT);
-                break;
-            case TraitType.CHK:
-                copy = new Trait_CHK(trait as Trait_CHK);
-                break;
-            case TraitType.NUM:
-                copy = new Trait_NUM(trait as Trait_NUM);
-                break;
-            case TraitType.TAG:
-                copy = new Trait_TAG(trait as Trait_TAG);
-                break;
-            default:
-                copy = new Trait_TXT();
-                break;
-        }
-
-        return copy;
-    }*/
 
     // Empty constructor
     public TraitCollection() { }

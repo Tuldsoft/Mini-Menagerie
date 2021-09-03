@@ -37,90 +37,6 @@ public class MenuMonitor : MonoBehaviour
     List<Button> menuButtons = new List<Button>();
     List<object> menuResults = new List<object>();
 
-    // Replaced by async version
-    /*public void SetMenu(MenuType type = MenuType.Main)
-    {
-        
-        // get info from template
-        Vector2 position = menuItemTemplate.transform.localPosition;
-        float height = menuItemTemplate.rectTransform.rect.height * menuItemTemplate.rectTransform.localScale.y;
-        float offsetY = Mathf.Abs(position.y) - (height / 2);
-        Transform parentTransform = menuItemTemplate.transform.parent.transform;
-        Vector3 scale = menuItemTemplate.transform.localScale;
-
-        //float maxWidth = 0f;
-
-        menuType = type;
-        Dictionary<object, string> dict = MenuManager.MenuNamesDict[type];
-
-        *//*// retrieve appropriate dictionary
-        switch (menuType)
-        {
-            case MenuType.Main:
-                dict = MenuManager.MainMenuNames;
-                break;
-            case MenuType.Trait:
-                dict = MenuManager.NewTraitNames;
-                anchorLeft = false;
-                break;
-            default:
-                dict = MenuManager.MainMenuNames;
-                break;
-        }*//*
-
-        foreach (KeyValuePair<object, string> pair in dict)
-        {
-
-            GameObject newMenuItem = Instantiate(menuItemTemplate.gameObject);
-            newMenuItem.transform.SetParent(parentTransform);
-            newMenuItem.transform.localScale = scale;
-            newMenuItem.transform.localPosition = position;
-
-            //RectTransform rectT = newMenuItem.GetComponent<RectTransform>();
-            //maxWidth = Mathf.Max(Mathf.Abs(rectT.sizeDelta.x * rectT.localScale.x), maxWidth);
-
-            MenuItem menuItem = newMenuItem.GetComponent<MenuItem>();
-            menuItem.SetMenuItem((MenuName)pair.Key, pair.Value, this);
-
-            menuItems.Add(menuItem);
-
-            // move to next position
-            position = new Vector2(position.x, position.y - (height + offsetY));
-        }
-        
-        Destroy(menuItemTemplate);
-
-        // resize Content (parentTransform) height 
-        RectTransform rt = parentTransform.GetComponent<RectTransform>();
-        rt.sizeDelta = new Vector2(rt.sizeDelta.x, Mathf.Abs(position.y) - height + offsetY);
-
-        // using resize of texts to fit width, no need to expand Menuscroll width
-
-        // resize MenuScroll width (Content -> Viewport -> MenuScroll
-        *//*Transform scrollTransform = parentTransform.parent.transform.parent.transform;
-        rt = scrollTransform.GetComponent<RectTransform>();
-
-        float scrollWidth = rt.rect.width;
-        if (scrollWidth < maxWidth)
-            rt.sizeDelta = new Vector2(maxWidth, rt.sizeDelta.y);*//*
-
-        if (menuType == MenuType.Trait)
-            anchorLeft = false;
-
-        // position MenuScroll left or right
-        if (!anchorLeft)
-        {
-            RectTransform msRT = menuScroll.GetComponent<RectTransform>();
-            msRT.anchorMin = new Vector2(1f, 1f);
-            msRT.anchorMax = new Vector2(1f, 1f);
-            Vector2 aPos = msRT.anchoredPosition;
-            aPos.x = -aPos.x - msRT.sizeDelta.x;
-            msRT.anchoredPosition = aPos;
-        }
-
-    }*/
-
-    // Replacement for SetMenu()
     // Set up the monitor and await the result of the click
     public async Task<object> SetMonitorAsync (MenuType menuType, CancellationToken ct)
     {
@@ -178,16 +94,18 @@ public class MenuMonitor : MonoBehaviour
         RectTransform rt = parentTransform.GetComponent<RectTransform>();
         rt.sizeDelta = new Vector2(rt.sizeDelta.x, Mathf.Abs(position.y) - height + offsetY);
 
+        /*
         // using resize of texts to fit width, no need to expand Menuscroll width
         // later, keep the size of the text the same, and resize the menu to fit the text.
 
         // resize MenuScroll width (Content -> Viewport -> MenuScroll
-        /*Transform scrollTransform = parentTransform.parent.transform.parent.transform;
+        Transform scrollTransform = parentTransform.parent.transform.parent.transform;
         rt = scrollTransform.GetComponent<RectTransform>();
 
         float scrollWidth = rt.rect.width;
         if (scrollWidth < maxWidth)
-            rt.sizeDelta = new Vector2(maxWidth, rt.sizeDelta.y);*/
+            rt.sizeDelta = new Vector2(maxWidth, rt.sizeDelta.y);
+        */
 
         // position MenuScroll left or right
         if (!anchorLeft)

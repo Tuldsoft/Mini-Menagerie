@@ -27,7 +27,7 @@ static public class MiniCollection
     {
         foreach (Mini mini in Minis)
         {
-            mini.AddTrait(Trait.Copy(trait));
+            mini.Traits.AddTrait(Trait.Copy(trait));
         }
     }
 

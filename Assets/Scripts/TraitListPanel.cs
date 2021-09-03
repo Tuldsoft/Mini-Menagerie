@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Pieces of the TraitPicker, etc.
 public class TraitListPanel : ScrollListPanel<Trait>
 {
     [SerializeField]
@@ -47,14 +48,13 @@ public class TraitListPanel : ScrollListPanel<Trait>
         
     }
 
+
     // used by both TraitListMonitor and TraitPickerMonitor
     public virtual void Panel_Click()
     {
         if (isPickerPanel)
         {
-            Mini.ActiveMini.AddTrait(Trait.Copy(trait));
-
-            //monitor.PopulateGrid(true); // scroll to end
+            Mini.ActiveMini.Traits.AddTrait(Trait.Copy(trait));
 
             // PickerList -> Canvas -> prefab
             MenuManager.CloseMenu(monitor.gameObject.transform.parent.transform.parent.gameObject);
@@ -64,26 +64,14 @@ public class TraitListPanel : ScrollListPanel<Trait>
             Trait.SetActive(trait);
             MenuManager.GoToMenu(MenuName.TraitDetails);
 
-            StartCoroutine(WaitForClose());
+            StartCoroutine(MenuManager.WaitForClose(monitor.PopulateGrid));
         }
-    }
-
-
-    IEnumerator WaitForClose()
-    {
-        yield return new WaitWhile(MenuManager.MenuOpen);
-        monitor.PopulateGrid();
-        yield return null;
     }
 
     public async void TrashButton_Click()
     {
         PopupResult popResult = await MenuManager.LaunchPopupAsync(PopupType.OKCancel,
             $"Destroying {trait.Name} will remove it from all minis. Proceed?");
-
-        // dialogbox and coroutine replaced with async version
-        /*MenuManager.LaunchDialogBox(DialogBoxType.OKCancel, $"Destroying {trait.Name} will remove it from all minis. Proceed?");
-        StartCoroutine(MenuManager.WaitForClose(RemoveFromAll));*/
 
         if (popResult == PopupResult.OK)
         {
@@ -93,15 +81,6 @@ public class TraitListPanel : ScrollListPanel<Trait>
         }
     }
 
-    void RemoveFromAll()
-    {
-        if (DialogBoxMonitor.Response == DialogBoxResponse.OK)
-        {
-            MiniCollection.RemoveTraitFromAllMinis(trait);
-            Trait.RemoveTrait(trait);
-            monitor.PopulateGrid();
-        }
-    }
 
 
 }

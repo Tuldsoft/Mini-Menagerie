@@ -90,7 +90,6 @@
     <Compile Include="Assets\Scripts\MenuMonitor.cs" />
     <Compile Include="Assets\Scripts\ScrollListPanel.cs" />
     <Compile Include="Assets\Scripts\ShowHideListPanel.cs" />
-    <Compile Include="Assets\Scripts\DialogBoxMonitor.cs" />
     <Compile Include="Assets\Scripts\TraitDetailsMonitor_NUM.cs" />
     <Compile Include="Assets\Scripts\MiniListMonitor.cs" />
     <Compile Include="Assets\Scripts\MiniTraitListMonitor.cs" />

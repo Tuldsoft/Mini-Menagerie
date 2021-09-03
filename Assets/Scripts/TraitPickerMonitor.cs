@@ -6,7 +6,7 @@ using UnityEngine;
 public class TraitPickerMonitor : ScrollListMonitor<Trait>
 {
 
-
+    // Overrides ReferenceList for ScrollListMonitor
     protected override IEnumerable<Trait> ReferenceList
     { get { return from trait in Trait.List
                    where !Mini.ActiveMini.Traits.List.Contains(trait)

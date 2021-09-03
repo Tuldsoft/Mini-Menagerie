@@ -18,13 +18,8 @@ public class ThumbListMonitor : ScrollListMonitor<Mini>
 
     protected override void Start()
     {
-        // Load a shop panel template
-        //prefabPanel = Resources.Load<GameObject>(@"Prefabs\prefabMiniThumbnail");
-
         keepFirstPanel = false;
-
         base.Start();
-        
     }
 
     // Sprite is not IComparable, so override
